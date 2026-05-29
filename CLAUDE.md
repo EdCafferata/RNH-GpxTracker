@@ -11,7 +11,7 @@ Registreert GPS-sporen op het water, slaat op als GPX, deelt via e-mail/AirDrop.
 ## Locatie & build
 - **Project:** `/Volumes/Backup-Ed/AI/RHN-GpxTracker/`
 - **Xcode project:** `OpenRHNTracker.xcodeproj`
-- **Bundle ID:** `info.cafferata.RhnGpxTracker`
+- **Bundle ID:** `info.cafferata.RnhGpxTracker`
 - **GitHub:** https://github.com/EdCafferata/RHN-GpxTracker — branch: `main`
 - **Versie:** `2.0.0` (build 1)
 - **Simulator ID:** `F6112483-4A4A-457E-8710-B0CAC169B941` (iPhone 16, iOS 18.6)

@@ -1066,7 +1066,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 2.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = info.cafferata.RhnGpxTracker;
+				PRODUCT_BUNDLE_IDENTIFIER = info.cafferata.RnhGpxTracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = OpenRHNTracker/ObjectiveCBridgingHeader.h;
 				SWIFT_VERSION = 5.0;
@@ -1091,7 +1091,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 2.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = info.cafferata.RhnGpxTracker;
+				PRODUCT_BUNDLE_IDENTIFIER = info.cafferata.RnhGpxTracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = OpenRHNTracker/ObjectiveCBridgingHeader.h;
 				SWIFT_VERSION = 5.0;
@@ -1118,7 +1118,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "info.cafferata.RhnGpxTracker.tests";
+				PRODUCT_BUNDLE_IDENTIFIER = "info.cafferata.RnhGpxTracker.tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OpenRHNTracker.app/OpenRHNTracker";
@@ -1140,7 +1140,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "info.cafferata.RhnGpxTracker.tests";
+				PRODUCT_BUNDLE_IDENTIFIER = "info.cafferata.RnhGpxTracker.tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OpenRHNTracker.app/OpenRHNTracker";
@@ -1168,7 +1168,7 @@
 				MARKETING_VERSION = 2.0.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = info.cafferata.RhnGpxTracker.watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = info.cafferata.RnhGpxTracker.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -1201,7 +1201,7 @@
 				MARKETING_VERSION = 2.0.0;
 				MTL_FAST_MATH = YES;
 				"EXCLUDED_ARCHS[sdk=watchsimulator*]" = "arm64 arm64e x86_64";
-				PRODUCT_BUNDLE_IDENTIFIER = info.cafferata.RhnGpxTracker.watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = info.cafferata.RnhGpxTracker.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -1235,7 +1235,7 @@
 				MARKETING_VERSION = 2.0.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = info.cafferata.RhnGpxTracker.watchkitapp.ext;
+				PRODUCT_BUNDLE_IDENTIFIER = info.cafferata.RnhGpxTracker.watchkitapp.ext;
 				PRODUCT_NAME = "${TARGET_NAME}";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -1270,7 +1270,7 @@
 				);
 				MARKETING_VERSION = 2.0.0;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = info.cafferata.RhnGpxTracker.watchkitapp.ext;
+				PRODUCT_BUNDLE_IDENTIFIER = info.cafferata.RnhGpxTracker.watchkitapp.ext;
 				PRODUCT_NAME = "${TARGET_NAME}";
 				"EXCLUDED_ARCHS[sdk=watchsimulator*]" = "arm64 arm64e x86_64";
 				SDKROOT = watchos;
