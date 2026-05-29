@@ -97,12 +97,12 @@ Strings in `OpenRHNTracker/<taal>.lproj/Localizable.strings`
 - [x] **App-icoon:** 1024×1024 YSV Ronde om Noord-Holland badge — issue #4 gesloten (2026-05-29)
 - [x] **Build 2.0.0 geüpload naar App Store Connect** — Delivery UUID: 9dc4e291-f9e9-4709-aaec-605c5e9e521c (2026-05-29)
 - [x] **iPhone screenshots** (3×, 1320×2868): IJmuiden/OpenSeaMap — `AppStore/Screenshots/` (2026-05-29)
-- [x] **iPad screenshots** (3×, 2064×2752): IJmuiden/OpenSeaMap — `AppStore/Screenshots/iPad/` (2026-05-29)
-- [ ] **In App Store Connect:** screenshots uploaden + versie 2.0.0 indienen voor review
+- [x] **iPad screenshots** (3×, 2064×2752 portrait): IJmuiden/OpenSeaMap, 5.8kn zoom — `AppStore/Screenshots/iPad/` (2026-05-29)
+- [x] **Versie 2.0.0 ingediend bij Apple Review** (2026-05-29) 🎉
 
 ## Open issues (backlog)
 - [ ] #1 App Store beschrijving uitbreiden met volledige functielijst
 - [ ] #2 Batterijverbruik optimaliseren: GPS accuraatheid aanpassen op snelheid
 - [ ] #3 ViewController.swift refactoren (1647+ regels)
-- [ ] #5 App Store Connect: screenshots uploaden (liggen klaar in `AppStore/Screenshots/`)
 - [ ] #6 App beschikbaar stellen in alle landen (taalbestanden aanwezig)
+- [ ] #7 Verwijder overbodige placeholder-screenshots uit GitHub
