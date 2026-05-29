@@ -1,0 +1,24 @@
+{
+  "originHash" : "5586d2679866d96501e690feeb98ccc149c8da75160c326cbc30846b54d38a26",
+  "pins" : [
+    {
+      "identity" : "coregpx",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vincentneo/CoreGPX.git",
+      "state" : {
+        "revision" : "42662cc9235d385bdd0356c8f4cb7b581da24e39",
+        "version" : "0.9.3"
+      }
+    },
+    {
+      "identity" : "mapcache",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/merlos/MapCache",
+      "state" : {
+        "revision" : "c18c99823de57b6d91c6af248a1e436d380f88cc",
+        "version" : "0.10.0"
+      }
+    }
+  ],
+  "version" : 3
+}
