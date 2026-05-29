@@ -148,13 +148,13 @@ Primaire taal app : [bijv. Nederlands (nl) / Engels (en) / Duits (de)]
 ## 11. Over-pagina tekst
 
 ```
-Titel over-pagina      : [bijv. RHN GPX Tracker]
+Titel over-pagina      : [bijv. RHN Tracker]
 Gemaakt door (naam)    : [bijv. Ed Cafferata]
 GitHub profiel URL     : [bijv. https://github.com/EdCafferata]
 Beschrijving van de app: [2-3 zinnen over wat de app doet en voor wie]
 
 Voorbeeld:
-  "RHN GPX Tracker is een gratis GPS-trackingapp voor zeilers en iedereen
+  "RHN Tracker is een gratis GPS-trackingapp voor zeilers en iedereen
    die onderweg nauwkeurige GPX-sporen wil vastleggen. Vrij te gebruiken en te delen."
 ```
 
@@ -197,7 +197,7 @@ Wil je een tekstbanner boven/onder de screenshots?
 
 > Zie `BOUW_HANDLEIDING.md` stap 14 voor het Python-script dat alle
 > 14 App Store formaten automatisch genereert vanuit één simulatoropname.
-> Alle gegenereerde bestanden voor RHN GPX Tracker staan in `AppStore/Screenshots/`.
+> Alle gegenereerde bestanden voor RHN Tracker staan in `AppStore/Screenshots/`.
 
 ---
 

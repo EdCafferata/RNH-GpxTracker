@@ -1,6 +1,6 @@
-# RHN GPX Tracker 🚤
+# RHN Tracker 🚤
 
-[![Available on the App Store](https://merlos.github.io/iOS-Open-RHN-Tracker/images/download-app-store.svg)](https://apps.apple.com/nl/app/bvk-gpx-tracker/id6770708440)
+[![Available on the App Store](https://merlos.github.io/iOS-Open-RHN-Tracker/images/download-app-store.svg)](https://apps.apple.com/nl/app/bvk-gpx-tracker/id1598986930)
 ![Versie](https://img.shields.io/badge/versie-2.0.0-blue)
 ![Platform](https://img.shields.io/badge/platform-iOS%2012%2B%20%7C%20watchOS-lightgrey)
 
@@ -60,7 +60,7 @@ Nederlands, Engels, Duits, Spaans, Frans, Italiaans, Fins, Portugees (Brazilië)
 
 ## Installeren
 
-De app is beschikbaar in de **[App Store](https://apps.apple.com/nl/app/bvk-gpx-tracker/id6770708440)**.
+De app is beschikbaar in de **[App Store](https://apps.apple.com/nl/app/bvk-gpx-tracker/id1598986930)**.
 
 Je kunt de broncode ook zelf compileren met Xcode:
 ```bash

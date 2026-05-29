@@ -1,7 +1,7 @@
 # App Store Release Notes — v2.0.0
 
 Kopieer de tekst hieronder naar App Store Connect:
-Mijn apps → RHN GPX Tracker → versie 2.0 → "Wat is er nieuw"
+Mijn apps → RHN Tracker → versie 2.0 → "Wat is er nieuw"
 
 ---
 

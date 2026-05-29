@@ -1,4 +1,4 @@
-# RHN GPX Tracker — Claude instructies
+# RHN Tracker — Claude instructies
 
 ## Projectoverzicht
 iOS + WatchOS GPX tracker app voor RHN (Ronde om Noord Holland).
