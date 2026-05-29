@@ -95,7 +95,8 @@ Strings in `OpenRHNTracker/<taal>.lproj/Localizable.strings`
 - [x] OpenSeaMap max zoom 18
 - [x] EXCLUDED_ARCHS watchOS simulator workaround (Xcode 26.5)
 - [x] **App-icoon:** 1024×1024 YSV Ronde om Noord-Holland badge — issue #4 gesloten (2026-05-29)
-- [ ] **Upload build 2.0.0** via TestFlight → App beschikbaar stellen in App Store
+- [x] **Build 2.0.0 geüpload naar App Store Connect** — Delivery UUID: 9dc4e291-f9e9-4709-aaec-605c5e9e521c (2026-05-29)
+- [ ] **In App Store Connect:** screenshots toevoegen + versie indienen voor review
 
 ## Open issues (backlog)
 - [ ] #1 App Store beschrijving uitbreiden met volledige functielijst
