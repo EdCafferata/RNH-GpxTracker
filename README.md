@@ -54,6 +54,7 @@ Nederlands, Engels, Duits, Spaans, Frans, Italiaans, Fins, Portugees (Brazilië)
 
 | Versie | Datum | Wijzigingen |
 |--------|-------|-------------|
+| **2.1.0** | in ontwikkeling | Snelheidsgebaseerde GPS-besparing, 'Telefoon op de lader' modus |
 | **2.0.0** | 2026-05-29 | Snelheidsgebaseerde zoom, "Doorgaan" actieblad iPhone + Watch, live in App Store |
 | 1.10.1 | 2026-05-22 | TestFlight release, stabiliteitsverbeteringen |
 
