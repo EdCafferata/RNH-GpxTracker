@@ -1,6 +1,18 @@
 # App Store Beschrijving — RHN Tracker
 
-Kopieer de tekst naar App Store Connect:
+---
+
+## 📣 Promotional Text (max 170 tekens — mag op elk moment gewijzigd worden zonder nieuwe build)
+
+### 🇳🇱 Nederlands
+GPS-tracker voor de Ronde om Noord Holland. Slimme batterijbesparing, OpenSeaMap, Apple Watch. Geen account, geen abonnement.
+
+### 🇬🇧 English
+GPS tracker for the Ronde om Noord Holland. Smart battery saving, OpenSeaMap, Apple Watch. No account, no subscription.
+
+---
+
+Kopieer de beschrijving naar App Store Connect:
 Mijn apps → RHN Tracker → App Store pagina → Beschrijving
 
 ---
