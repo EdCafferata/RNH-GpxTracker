@@ -1,8 +1,9 @@
 # RHN Tracker 🚤
 
-[![Available on the App Store](https://merlos.github.io/iOS-Open-RHN-Tracker/images/download-app-store.svg)](https://apps.apple.com/nl/app/bvk-gpx-tracker/id1598986930)
+[![Available on the App Store](https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg)](https://apps.apple.com/nl/app/rhn-tracker/id1598986930)
 ![Versie](https://img.shields.io/badge/versie-2.0.0-blue)
-![Platform](https://img.shields.io/badge/platform-iOS%2012%2B%20%7C%20watchOS-lightgrey)
+![Platform](https://img.shields.io/badge/platform-iOS%2017%2B%20%7C%20watchOS-lightgrey)
+![App Store](https://img.shields.io/badge/App%20Store-live%20🟢-brightgreen)
 
 GPS tracker voor iPhone en Apple Watch. Speciaal gebouwd voor **RHN — Ronde om Noord Holland**. Registreer je vaarroute, voeg waypoints toe en deel je GPX-sporen via e-mail of AirDrop.
 
@@ -60,7 +61,7 @@ Nederlands, Engels, Duits, Spaans, Frans, Italiaans, Fins, Portugees (Brazilië)
 
 ## Installeren
 
-De app is beschikbaar in de **[App Store](https://apps.apple.com/nl/app/bvk-gpx-tracker/id1598986930)**.
+De app is beschikbaar in de **[App Store](https://apps.apple.com/nl/app/rhn-tracker/id1598986930)**.
 
 Je kunt de broncode ook zelf compileren met Xcode:
 ```bash
@@ -72,7 +73,7 @@ open OpenRHNTracker.xcodeproj
 
 ## Technische details
 
-- **Platform:** iOS 12+ / watchOS
+- **Platform:** iOS 17+ / watchOS
 - **Taal:** Swift / UIKit / WatchKit
 - **Kaartcaching:** MapCache package
 - **Privacy:** alle GPS-data blijft op het apparaat of in iCloud als je het daar zelf plaatst — niets wordt gedeeld met derden
