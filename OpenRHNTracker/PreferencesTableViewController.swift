@@ -40,6 +40,9 @@ let kTrackingSection = 7
 /// Cell Id for track interval in kTrackingSection
 let kTrackIntervalCell = 0
 
+/// Cell Id for charger mode in kTrackingSection
+let kChargerModeCell = 1
+
 /// Cell Id of the Use Imperial units in UnitsSection
 let kUseImperialUnitsCell = 0
 
@@ -163,7 +166,7 @@ class PreferencesTableViewController: UITableViewController, UINavigationBarDele
         case kDefaultNameSection: return 1
         case kGPXFilesLocationSection: return 1
         case kScreenSection: return 2
-        case kTrackingSection: return 1
+        case kTrackingSection: return 2
         default: fatalError("Unknown section")
         }
     }
@@ -301,11 +304,29 @@ class PreferencesTableViewController: UITableViewController, UINavigationBarDele
     }
 
     private func cellForTrackingSection(at indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .value1, reuseIdentifier: "TrackingCell")
-        cell.textLabel?.text = NSLocalizedString("TRACK_INTERVAL", comment: "no comment")
-        cell.detailTextLabel?.text = formatTrackInterval(preferences.trackIntervalSeconds)
-        cell.accessoryType = .disclosureIndicator
-        return cell
+        switch indexPath.row {
+        case kTrackIntervalCell:
+            let cell = UITableViewCell(style: .value1, reuseIdentifier: "TrackingCell")
+            cell.textLabel?.text = NSLocalizedString("TRACK_INTERVAL", comment: "no comment")
+            cell.detailTextLabel?.text = formatTrackInterval(preferences.trackIntervalSeconds)
+            cell.accessoryType = .disclosureIndicator
+            return cell
+        case kChargerModeCell:
+            let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "ChargerModeCell")
+            cell.textLabel?.text = "📱 Telefoon op de lader"
+            cell.detailTextLabel?.text = "Hoogste GPS-nauwkeurigheid + maximale kaart-zoom"
+            if #available(iOS 13.0, *) {
+                cell.detailTextLabel?.textColor = .secondaryLabel
+            } else {
+                cell.detailTextLabel?.textColor = .gray
+            }
+            if preferences.chargerMode {
+                cell.accessoryType = .checkmark
+            }
+            return cell
+        default:
+            fatalError("cellForTrackingSection: Unknown cell")
+        }
     }
 
     private func formatTrackInterval(_ seconds: Double) -> String {
@@ -451,7 +472,18 @@ class PreferencesTableViewController: UITableViewController, UINavigationBarDele
         }
 
         if indexPath.section == kTrackingSection {
-            showTrackIntervalPicker()
+            switch indexPath.row {
+            case kTrackIntervalCell:
+                showTrackIntervalPicker()
+            case kChargerModeCell:
+                let newChargerMode = !preferences.chargerMode
+                preferences.chargerMode = newChargerMode
+                print("PreferencesTableViewController: toggle chargerMode to \(newChargerMode)")
+                tableView.cellForRow(at: indexPath)?.accessoryType = newChargerMode ? .checkmark : .none
+                delegate?.didUpdateChargerMode(newChargerMode)
+            default:
+                break
+            }
         }
 
         // Unselect row

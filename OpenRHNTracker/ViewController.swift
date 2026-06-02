@@ -131,6 +131,9 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     ///   2–6 kn    → Best           +  5m filter  (volle GPS)
     ///   > 6 kn    → Best           +  2m filter  (volle GPS, max resolutie)
     private func updateGPSAccuracy(speedMs: Double) {
+        // Charger mode: altijd best, geen aanpassing nodig
+        guard !Preferences.shared.chargerMode else { return }
+
         let knots = speedMs * 1.94384
 
         let accuracy: CLLocationAccuracy
@@ -1547,6 +1550,19 @@ extension ViewController: PreferencesTableViewControllerDelegate {
     func didUpdateTrackInterval(_ newIntervalSeconds: Double) {
         print("PreferencesTableViewControllerDelegate:: didUpdateTrackInterval: \(newIntervalSeconds)s")
         lastTrackedDate = nil
+    }
+
+    func didUpdateChargerMode(_ newChargerMode: Bool) {
+        print("PreferencesTableViewControllerDelegate:: didUpdateChargerMode: \(newChargerMode)")
+        if newChargerMode {
+            // Charger mode: altijd hoogste nauwkeurigheid, geen snelheidsgebaseerde aanpassing
+            currentGPSProfile = "" // reset zodat volgende update opnieuw evalueert
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            locationManager.distanceFilter  = 2
+        } else {
+            // Terug naar adaptief: reset profiel zodat het direct bijstelt bij volgende locatie-update
+            currentGPSProfile = ""
+        }
     }
 }
 

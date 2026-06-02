@@ -44,6 +44,9 @@ let kDefaultsKeyKeepScreenAlwaysOn: String = "KeepScreenAlwaysOn"
 
 let kDefaultsKeyShowScaleBar: String = "ShowScaleBar"
 
+/// Key on Defaults for charger mode (always best GPS + max zoom).
+let kDefaultsKeyChargerMode: String = "ChargerMode"
+
 /// Key on Defaults for the trackpoint recording interval in seconds.
 let kDefaultsKeyTrackInterval: String = "TrackIntervalSeconds"
 
@@ -95,9 +98,12 @@ class Preferences: NSObject {
     
     ///
     private var _keepScreenAlwaysOn: Bool = true
-    
+
     ///
     private var _showScaleBar: Bool = true
+
+    /// Charger mode: altijd hoogste GPS-nauwkeurigheid + maximale kaart-zoom (standaard uit)
+    private var _chargerMode: Bool = false
 
     /// Trackpoint recording interval in seconds. Default 1 second.
     private var _trackIntervalSeconds: Double = 1.0
@@ -187,6 +193,12 @@ class Preferences: NSObject {
         if let showScaleBarBool = defaults.object(forKey: kDefaultsKeyShowScaleBar) as? Bool {
             _showScaleBar = showScaleBarBool
             print("** Preferences:: loaded preference from defaults showScaleBar \(showScaleBarBool)")
+        }
+
+        // load charger mode preference
+        if let chargerModeBool = defaults.object(forKey: kDefaultsKeyChargerMode) as? Bool {
+            _chargerMode = chargerModeBool
+            print("** Preferences:: loaded preference from defaults chargerMode \(chargerModeBool)")
         }
 
         // load previous trackpoint interval
@@ -351,7 +363,20 @@ class Preferences: NSObject {
             print("** Preferences:: setting showScaleBar: \(newValue)")
         }
     }
-    
+
+    /// Charger mode: altijd hoogste GPS-nauwkeurigheid + maximale kaart-zoom.
+    /// Gebruik als de telefoon op de lader ligt. Schakelt snelheidsgebaseerde GPS-besparing uit.
+    var chargerMode: Bool {
+        get {
+            return _chargerMode
+        }
+        set {
+            _chargerMode = newValue
+            defaults.set(newValue, forKey: kDefaultsKeyChargerMode)
+            print("** Preferences:: setting chargerMode: \(newValue)")
+        }
+    }
+
     /// Gets and sets the trackpoint recording interval in seconds (minimum 1).
     var trackIntervalSeconds: Double {
         get { return _trackIntervalSeconds }

@@ -34,4 +34,7 @@ protocol PreferencesTableViewControllerDelegate: AnyObject {
     /// User updated the trackpoint recording interval
     func didUpdateTrackInterval(_ newIntervalSeconds: Double)
 
+    /// User toggled charger mode (altijd hoogste GPS + max zoom)
+    func didUpdateChargerMode(_ newChargerMode: Bool)
+
 }
