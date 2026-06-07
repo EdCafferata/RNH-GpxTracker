@@ -185,7 +185,13 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
 
     /// Fires every 10 s to adjust the map region based on recent average speed.
     var mapUpdateTimer: Timer?
-    
+
+    /// Watchdog timer: checks every 10s if GPS updates are still coming in.
+    var gpsWatchdogTimer: Timer?
+
+    /// Timestamp of the last received GPS location update. Used by watchdog to detect stale GPS.
+    var lastGPSUpdateDate: Date?
+
     /// Name of the last file that was saved (without extension)
     var lastGpxFilename: String = "" {
         didSet {
@@ -499,6 +505,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         locationManager.startUpdatingLocation()
         locationManager.startUpdatingHeading()
         startMapUpdateTimer()
+        startGPSWatchdog()
         
         // Preferences
         map.tileServer = Preferences.shared.tileServer
@@ -1022,8 +1029,9 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         locationManager.startUpdatingLocation()
         locationManager.startUpdatingHeading()
         startMapUpdateTimer()
+        startGPSWatchdog()
     }
-    
+
     ///
     /// Actions to do in case the app entered in background
     ///
@@ -1036,6 +1044,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         print("viewController:: didEnterBackground")
         if gpxTrackingStatus != .tracking {
             locationManager.stopUpdatingLocation()
+            stopGPSWatchdog()
         }
         stopMapUpdateTimer()
     }
@@ -1428,6 +1437,31 @@ extension ViewController {
         mapUpdateTimer = nil
     }
 
+    /// Start GPS watchdog: controleert elke 10s of er nog locatie-updates binnenkomen.
+    /// Als de laatste update meer dan 10s geleden was, herstart de locationManager.
+    func startGPSWatchdog() {
+        gpsWatchdogTimer?.invalidate()
+        gpsWatchdogTimer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { [weak self] _ in
+            guard let self = self else { return }
+            guard let last = self.lastGPSUpdateDate else {
+                // Nog nooit een update gehad — probeer te starten
+                self.locationManager.startUpdatingLocation()
+                return
+            }
+            let elapsed = Date().timeIntervalSince(last)
+            if elapsed > 10.0 {
+                print("GPS watchdog: geen update sinds \(Int(elapsed))s — GPS fix herstellen")
+                self.locationManager.startUpdatingLocation()
+                self.locationManager.startUpdatingHeading()
+            }
+        }
+    }
+
+    func stopGPSWatchdog() {
+        gpsWatchdogTimer?.invalidate()
+        gpsWatchdogTimer = nil
+    }
+
     /// Adjusts the visible map region based on the average speed over the last 60 seconds.
     /// Runs independently of the GPX recording interval so tiles always preload ahead.
     ///
@@ -1617,7 +1651,14 @@ extension ViewController: CLLocationManagerDelegate {
         let locationError = error as? CLError
         switch locationError?.code {
         case CLError.locationUnknown:
-            print("Location Unknown")
+            // iOS geeft dit als GPS tijdelijk niet beschikbaar is (bijv. andere app heeft prioriteit).
+            // Herstart location updates na korte delay om de fix te herstellen.
+            print("Location Unknown — GPS fix herstellen over 2s")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+                guard let self = self else { return }
+                self.locationManager.startUpdatingLocation()
+                self.locationManager.startUpdatingHeading()
+            }
         case CLError.denied:
             print("Access to location services denied. Display message")
             checkLocationServicesStatus()
@@ -1626,7 +1667,7 @@ extension ViewController: CLLocationManagerDelegate {
         default:
             print("Default error")
         }
-  
+
     }
     
     ///
@@ -1634,6 +1675,9 @@ extension ViewController: CLLocationManagerDelegate {
     ///
     ///
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        // Registreer tijdstip voor GPS watchdog
+        lastGPSUpdateDate = Date()
+
         // Update signal image accuracy
         let newLocation = locations.first!
 
@@ -1708,6 +1752,17 @@ extension ViewController: CLLocationManagerDelegate {
     ///
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         checkLocationServicesStatus()
+    }
+
+    /// iOS kan locatie-updates intern pauzeren (bijv. andere GPS-app op voorgrond, signaalverlies).
+    /// Herstart de updates automatisch na 2 seconden zodat de GPS fix hersteld wordt.
+    func locationManagerDidPauseLocationUpdates(_ manager: CLLocationManager) {
+        print("GPS watchdog: locationManager gepauzeerd — GPS fix herstellen over 2s")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+            guard let self = self else { return }
+            self.locationManager.startUpdatingLocation()
+            self.locationManager.startUpdatingHeading()
+        }
     }
 }
 
