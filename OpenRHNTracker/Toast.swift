@@ -136,9 +136,16 @@ class Toast {
                           backgroundColor: UIColor = kRegularBackgroundColor,
                           position: Position = .bottom,
                           delay: Double = kDelayLong) {
-        guard let window = UIApplication.shared.keyWindow else {
-            return
+        let window: UIWindow?
+        if #available(iOS 13.0, *) {
+            window = UIApplication.shared.connectedScenes
+                .compactMap { $0 as? UIWindowScene }
+                .flatMap { $0.windows }
+                .first { $0.isKeyWindow }
+        } else {
+            window = UIApplication.shared.keyWindow
         }
+        guard let window = window else { return }
         let label = ToastLabel(text: message)
         label.textColor = textColor
         label.backgroundColor = backgroundColor
