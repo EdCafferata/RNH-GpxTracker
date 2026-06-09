@@ -102,7 +102,7 @@ open OpenRHNTracker.xcodeproj
 | Naam | Rol |
 |------|-----|
 | Ed Cafferata | Ontwikkelaar |
-| RNH — Ronde om Noord-Holland | Opdrachtgever |
+| RNH — Ronde om Noord-Holland | kado |
 
 ---
 
