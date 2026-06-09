@@ -79,7 +79,7 @@ platform :ios do
     )
   end
 
-  # ─── Alleen metadata uploaden ──────────────────────────────────────────────
+  # ─── Alleen metadata uploaden (voor versie in voorbereiding) ──────────────
   desc "Upload beschrijving en release notes naar App Store Connect"
   lane :metadata do
     upload_to_app_store(
@@ -88,9 +88,23 @@ platform :ios do
       skip_binary_upload:         true,
       skip_screenshots:           true,
       force:                      true,
-      edit_live:                  true,
       run_precheck_before_submit: false,
       metadata_path:              "fastlane/metadata"
+    )
+  end
+
+  # ─── Alleen promotional tekst updaten (werkt op live versie) ───────────────
+  desc "Update promotional tekst op de live versie"
+  lane :promo do
+    upload_to_app_store(
+      api_key:                    API_KEY,
+      app_identifier:             BUNDLE_ID,
+      skip_binary_upload:         true,
+      skip_screenshots:           true,
+      force:                      true,
+      edit_live:                  true,
+      run_precheck_before_submit: false,
+      metadata_path:              "fastlane/metadata_promo"
     )
   end
 

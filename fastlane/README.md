@@ -47,6 +47,14 @@ Upload screenshots naar App Store Connect
 
 Upload beschrijving en release notes naar App Store Connect
 
+### ios promo
+
+```sh
+[bundle exec] fastlane ios promo
+```
+
+Update promotional tekst op de live versie
+
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.

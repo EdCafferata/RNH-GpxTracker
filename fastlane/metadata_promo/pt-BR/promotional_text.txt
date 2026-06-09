@@ -1,0 +1,1 @@
+Rastreador GPS para a Ronde om Noord Holland. Clima ao vivo, camadas OWM com legenda, precipitação e ondas. Sem conta, sem assinatura.
