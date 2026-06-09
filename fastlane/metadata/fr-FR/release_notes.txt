@@ -1,0 +1,22 @@
+Version 2.2.0
+
+Nouveautés
+• Légende couleur OWM — une échelle de couleurs apparaît dans le coin de la carte pour chaque couche météo
+• Vitesse du vent en nœuds — affichée sous le cercle Beaufort sur la carte
+• Précipitations mm/h — intensité des précipitations ajoutée à la barre d'informations
+• Bouton info déplacé dans la rangée supérieure, à côté du bouton de partage
+
+Données météo en direct
+Direction du vent, force Beaufort, température, visibilité, pression, vagues et précipitations — via Open-Meteo.
+
+Couches OpenWeatherMap
+Précipitations, nuages, vent, pression ou température en superposition sur la carte de navigation. Compte OWM gratuit requis.
+
+Économie de batterie GPS
+Quatre profils GPS automatiques selon la vitesse — jusqu'à 80% d'économie à l'arrêt.
+
+Mode cap en haut
+La carte tourne automatiquement selon votre cap.
+
+Apple Watch
+Enregistrement GPX indépendant et envoi sans fil vers l'iPhone.

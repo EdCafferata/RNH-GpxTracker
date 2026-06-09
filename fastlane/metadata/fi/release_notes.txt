@@ -1,0 +1,22 @@
+Versio 2.2.0
+
+Uutta
+• OWM-väriselitys — jokaisen sääkerroksen väriskaala näkyy kartan kulmassa
+• Tuulennopeus solmuina — numero näkyy Beaufort-ympyrän alla kartalla
+• Sademäärä mm/h — nykyinen sateen voimakkuus lisätty tietopalkiin
+• Infopainike siirretty yläriville jakopainikkeen viereen
+
+Reaaliaikainen säätietö
+Tuulen suunta, Beaufort-arvo, lämpötila, näkyvyys, ilmanpaine, aallot ja sademäärä — Open-Meteon kautta.
+
+OpenWeatherMap-karttatasot
+Sade, pilvet, tuuli, paine tai lämpötila navigointikartan päällä. Ilmainen OWM-tili vaaditaan.
+
+GPS-akun säästö
+Neljä automaattista GPS-profiilia nopeuden mukaan — jopa 80% vähemmän virrankulutusta paikallaan.
+
+Kurssi ylös -tila
+Kartta kääntyy automaattisesti kulkusuunnan mukaan.
+
+Apple Watch
+Itsenäinen GPX-tallennus ja langaton siirto iPhoneen.

@@ -1,0 +1,22 @@
+Versão 2.2.0
+
+Novidades
+• Legenda de cores OWM — uma escala de cores aparece no canto do mapa para cada camada meteorológica
+• Velocidade do vento em nós — número visível abaixo do círculo Beaufort no mapa
+• Precipitação mm/h — intensidade atual da chuva adicionada à barra de informações
+• Botão de informações movido para a linha superior, ao lado do botão de compartilhar
+
+Dados meteorológicos ao vivo
+Direção do vento, força Beaufort, temperatura, visibilidade, pressão, ondas e precipitação — via Open-Meteo.
+
+Camadas OpenWeatherMap
+Precipitação, nuvens, vento, pressão ou temperatura como sobreposição no mapa. Conta OWM gratuita necessária.
+
+Economia de bateria GPS
+Quatro perfis GPS automáticos com base na velocidade — até 80% menos uso da bateria em repouso.
+
+Modo proa acima
+O mapa gira automaticamente com a direção de navegação.
+
+Apple Watch
+Gravação GPX independente e envio sem fio para o iPhone.

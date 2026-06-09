@@ -1,0 +1,22 @@
+Versione 2.2.0
+
+Novità
+• Legenda colori OWM — una scala di colori appare nell'angolo della mappa per ogni strato meteo
+• Velocità del vento in nodi — numero visibile sotto il cerchio Beaufort sulla mappa
+• Precipitazioni mm/h — intensità pioggia aggiunta alla barra informazioni
+• Pulsante info spostato nella riga superiore, accanto al pulsante di condivisione
+
+Dati meteo in tempo reale
+Direzione e forza del vento (Beaufort), temperatura, visibilità, pressione, onde e precipitazioni — via Open-Meteo.
+
+Livelli OpenWeatherMap
+Precipitazioni, nuvole, vento, pressione o temperatura come overlay sulla mappa. Account OWM gratuito richiesto.
+
+Risparmio batteria GPS
+Quattro profili GPS automatici in base alla velocità — fino all'80% in meno a riposo.
+
+Modalità rotta in alto
+La mappa ruota automaticamente con la direzione di navigazione.
+
+Apple Watch
+Registrazione GPX indipendente e invio wireless all'iPhone.
