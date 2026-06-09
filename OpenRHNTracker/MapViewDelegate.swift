@@ -49,7 +49,7 @@ class MapViewDelegate: NSObject, MKMapViewDelegate, UIAlertViewDelegate {
         if let tileOverlay = overlay as? MKTileOverlay {
             // OWM overlay — eigen renderer, geen MapCache
             if tileOverlay is OWMTileOverlay {
-                return MKTileOverlayRenderer(tileOverlay: tileOverlay)
+                return OWMTileRenderer(tileOverlay: tileOverlay)
             }
             // Alleen de tileServerOverlay van GPXMapView mag door MapCache
             if let gpxMap = mapView as? GPXMapView,

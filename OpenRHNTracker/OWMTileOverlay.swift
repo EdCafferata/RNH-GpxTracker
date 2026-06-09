@@ -44,3 +44,12 @@ class OWMTileOverlay: MKTileOverlay {
         return overlay
     }
 }
+
+/// Custom renderer die OWM tiles 3x tekent zodat de kleuren intenser/zichtbaarder worden.
+class OWMTileRenderer: MKTileOverlayRenderer {
+    override func draw(_ mapRect: MKMapRect, zoomScale: MKZoomScale, in context: CGContext) {
+        super.draw(mapRect, zoomScale: zoomScale, in: context)
+        super.draw(mapRect, zoomScale: zoomScale, in: context)
+        super.draw(mapRect, zoomScale: zoomScale, in: context)
+    }
+}
