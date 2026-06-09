@@ -99,6 +99,11 @@
 		BFF304822312DC800012D263 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4588D671230D2476009AA75F /* InfoPlist.strings */; };
 		DC4908A11C4A136F009484AE /* TrackerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC4908A01C4A136F009484AE /* TrackerButton.swift */; };
 		DC4908A31C4A332E009484AE /* MapViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC4908A21C4A332E009484AE /* MapViewDelegate.swift */; };
+		RHN001001RHN001001RHN001 /* OWMTileOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = RHN001002RHN001002RHN002 /* OWMTileOverlay.swift */; };
+		RHN001003RHN001003RHN003 /* OWMRegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = RHN001004RHN001004RHN004 /* OWMRegistrationViewController.swift */; };
+		RHN001005RHN001005RHN005 /* WindAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = RHN001006RHN001006RHN006 /* WindAnnotation.swift */; };
+		RHN001007RHN001007RHN007 /* RadarTileOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = RHN001008RHN001008RHN008 /* RadarTileOverlay.swift */; };
+		RHN001009RHN001009RHN009 /* SatelliteTileOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = RHN001010RHN001010RHN010 /* SatelliteTileOverlay.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -279,6 +284,11 @@
 		D39420E623CC1B0500EDC8F6 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		DC4908A01C4A136F009484AE /* TrackerButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackerButton.swift; sourceTree = "<group>"; };
 		DC4908A21C4A332E009484AE /* MapViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewDelegate.swift; sourceTree = "<group>"; };
+		RHN001002RHN001002RHN002 /* OWMTileOverlay.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; includeInIndex = 1; path = OWMTileOverlay.swift; sourceTree = "<group>"; };
+		RHN001004RHN001004RHN004 /* OWMRegistrationViewController.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; includeInIndex = 1; path = OWMRegistrationViewController.swift; sourceTree = "<group>"; };
+		RHN001006RHN001006RHN006 /* WindAnnotation.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; includeInIndex = 1; path = WindAnnotation.swift; sourceTree = "<group>"; };
+		RHN001008RHN001008RHN008 /* RadarTileOverlay.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; includeInIndex = 1; path = RadarTileOverlay.swift; sourceTree = "<group>"; };
+		RHN001010RHN001010RHN010 /* SatelliteTileOverlay.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; includeInIndex = 1; path = SatelliteTileOverlay.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -446,6 +456,7 @@
 				8913CD8D1BDB2477009EC729 /* PreferencesTableViewControllerDelegate.swift */,
 				DC4908A21C4A332E009484AE /* MapViewDelegate.swift */,
 				BF9AE57B2410011D00B103A0 /* DefaultNameSetupViewController.swift */,
+				RHN001004RHN001004RHN004 /* OWMRegistrationViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -460,6 +471,10 @@
 				BFE026C5244A02A4005423E6 /* DatePatternButton.swift */,
 				BF68ECC52448B887005C779F /* DateFieldTypeView.swift */,
 				897056122A230AAF0004F133 /* Toast.swift */,
+				RHN001006RHN001006RHN006 /* WindAnnotation.swift */,
+				RHN001002RHN001002RHN002 /* OWMTileOverlay.swift */,
+				RHN001008RHN001008RHN008 /* RadarTileOverlay.swift */,
+				RHN001010RHN001010RHN010 /* SatelliteTileOverlay.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -778,6 +793,11 @@
 				897056132A230AAF0004F133 /* Toast.swift in Sources */,
 				DC4908A11C4A136F009484AE /* TrackerButton.swift in Sources */,
 				89F8749F1BBCB97F004EF41A /* GPXRoot+length.swift in Sources */,
+				RHN001001RHN001001RHN001 /* OWMTileOverlay.swift in Sources */,
+				RHN001003RHN001003RHN003 /* OWMRegistrationViewController.swift in Sources */,
+				RHN001005RHN001005RHN005 /* WindAnnotation.swift in Sources */,
+				RHN001007RHN001007RHN007 /* RadarTileOverlay.swift in Sources */,
+				RHN001009RHN001009RHN009 /* SatelliteTileOverlay.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

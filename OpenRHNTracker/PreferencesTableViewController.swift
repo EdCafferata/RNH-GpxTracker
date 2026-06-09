@@ -161,7 +161,7 @@ class PreferencesTableViewController: UITableViewController, UINavigationBarDele
         switch section {
         case kCacheSection: return 2
         case kUnitsSection: return 1
-        case kMapSourceSection: return GPXTileServer.count
+        case kMapSourceSection: return GPXTileServer.count + 2 + OWMLayer.allCases.count // +1 wind, +1 OWM account, +OWM lagen
         case kActivityTypeSection: return CLActivityType.count
         case kDefaultNameSection: return 1
         case kGPXFilesLocationSection: return 1
@@ -261,6 +261,30 @@ class PreferencesTableViewController: UITableViewController, UINavigationBarDele
     
     private func cellForMapSourceSection(at indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .value1, reuseIdentifier: "MapCell")
+        // Wind overlay toggle
+        if indexPath.row == GPXTileServer.count {
+            cell.textLabel?.text = "Wind overlay"
+            cell.accessoryType = preferences.showWindOverlay ? .checkmark : .none
+            return cell
+        }
+        // OWM account instellen
+        if indexPath.row == GPXTileServer.count + 1 {
+            let owmCell = UITableViewCell(style: .subtitle, reuseIdentifier: "OWMCell")
+            owmCell.textLabel?.text = "OpenWeatherMap account"
+            owmCell.detailTextLabel?.text = preferences.owmApiKey.isEmpty ? "Geen key ingesteld" : "Key ingesteld ✓"
+            owmCell.detailTextLabel?.textColor = preferences.owmApiKey.isEmpty ? .systemRed : .systemGreen
+            owmCell.accessoryType = .disclosureIndicator
+            return owmCell
+        }
+        // OWM kaartlagen
+        let owmIndex = indexPath.row - GPXTileServer.count - 2
+        if owmIndex >= 0 && owmIndex < OWMLayer.allCases.count {
+            let layer = OWMLayer.allCases[owmIndex]
+            let isSelected = preferences.showOWMOverlay && preferences.owmLayer == layer
+            cell.textLabel?.text = "OWM: \(layer.displayName)"
+            cell.accessoryType = isSelected ? .checkmark : .none
+            return cell
+        }
         let tileServer = GPXTileServer(rawValue: indexPath.row)
         cell.textLabel?.text = tileServer!.name
         if indexPath.row == preferences.tileServerInt {
@@ -430,17 +454,62 @@ class PreferencesTableViewController: UITableViewController, UINavigationBarDele
             }
         }
         
-        if indexPath.section == kMapSourceSection { // section 1 (sets tileServerInt in defaults
+        if indexPath.section == kMapSourceSection {
+            // Wind overlay toggle
+            if indexPath.row == GPXTileServer.count {
+                let newValue = !preferences.showWindOverlay
+                preferences.showWindOverlay = newValue
+                tableView.cellForRow(at: indexPath)?.accessoryType = newValue ? .checkmark : .none
+                self.delegate?.didUpdateShowWindOverlay(newValue)
+                return
+            }
+            // OWM account scherm
+            if indexPath.row == GPXTileServer.count + 1 {
+                let vc = OWMRegistrationViewController()
+                vc.delegate = self
+                let nav = UINavigationController(rootViewController: vc)
+                present(nav, animated: true)
+                tableView.deselectRow(at: indexPath, animated: true)
+                return
+            }
+            // OWM laag selecteren
+            let owmIndex = indexPath.row - GPXTileServer.count - 2
+            if owmIndex >= 0 && owmIndex < OWMLayer.allCases.count {
+                guard !preferences.owmApiKey.isEmpty else {
+                    let alert = UIAlertController(title: "Geen API key", message: "Stel eerst een OpenWeatherMap API key in via 'OpenWeatherMap account'.", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default))
+                    present(alert, animated: true)
+                    tableView.deselectRow(at: indexPath, animated: true)
+                    return
+                }
+                let layer = OWMLayer.allCases[owmIndex]
+                let wasSelected = preferences.showOWMOverlay && preferences.owmLayer == layer
+                // Deselecteer alle OWM rijen
+                for i in 0..<OWMLayer.allCases.count {
+                    tableView.cellForRow(at: IndexPath(row: GPXTileServer.count + 2 + i, section: indexPath.section))?.accessoryType = .none
+                }
+                if wasSelected {
+                    preferences.showOWMOverlay = false
+                    self.delegate?.didUpdateShowOWMOverlay(false, layer: layer)
+                } else {
+                    preferences.owmLayer = layer
+                    preferences.showOWMOverlay = true
+                    tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
+                    self.delegate?.didUpdateShowOWMOverlay(true, layer: layer)
+                }
+                return
+            }
+
             print("PreferenccesTableView Map Tile Server section Row at index:  \(indexPath.row)")
-            
+
             // Remove checkmark from selected tile server
             let selectedTileServerIndexPath = IndexPath(row: preferences.tileServerInt, section: indexPath.section)
             tableView.cellForRow(at: selectedTileServerIndexPath)?.accessoryType = .none
-            
+
             // Add checkmark to new tile server
             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
             preferences.tileServerInt = indexPath.row
-            
+
             // Update map
             self.delegate?.didUpdateTileServer((indexPath as NSIndexPath).row)
         }
@@ -541,5 +610,11 @@ class PreferencesTableViewController: UITableViewController, UINavigationBarDele
         }
         preferences.gpxFilesFolderURL = folderURL
         tableView.reloadData()
+    }
+}
+
+extension PreferencesTableViewController: OWMRegistrationDelegate {
+    func didSaveOWMApiKey(_ key: String) {
+        tableView.reloadSections(IndexSet(integer: kMapSourceSection), with: .automatic)
     }
 }

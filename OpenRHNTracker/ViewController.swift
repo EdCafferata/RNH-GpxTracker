@@ -107,7 +107,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
             }
         }
     }
-
+    
     /// Last known true heading (degrees). Nil totdat CLLocationManager heading-updates binnenkomen.
     var lastTrueHeading: CLLocationDirection? = nil
 
@@ -120,7 +120,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         manager.requestAlwaysAuthorization()
         manager.activityType = CLActivityType(rawValue: Preferences.shared.locationActivityTypeInt)!
         print("Chosen CLActivityType: \(manager.activityType.name)")
-        manager.desiredAccuracy = kCLLocationAccuracyBest  // wordt dynamisch bijgesteld op snelheid
+        manager.desiredAccuracy = kCLLocationAccuracyBest
         manager.distanceFilter = 2 // meters
         manager.headingFilter = 3 // degrees (1 is default)
         manager.pausesLocationUpdatesAutomatically = false
@@ -129,55 +129,6 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         }
         return manager
     }()
-
-    /// Huidige GPS-accuraatheid profiel (voor logging / debug)
-    private var currentGPSProfile: String = ""
-
-    /// Pas GPS-accuraatheid en distanceFilter aan op basis van snelheid.
-    /// Dit bespaart 60-80% batterij bij stilliggen of langzaam varen.
-    ///
-    /// Profielen (snelheid in knopen):
-    ///   < 0.5 kn  → HundredMeters  + 50m filter  (GPS-chip uit, cel/wifi)
-    ///   0.5–2 kn  → TenMeters      + 10m filter  (GPS-chip aan, minder agressief)
-    ///   2–6 kn    → Best           +  5m filter  (volle GPS)
-    ///   > 6 kn    → Best           +  2m filter  (volle GPS, max resolutie)
-    private func updateGPSAccuracy(speedMs: Double) {
-        // Charger mode: altijd best, geen aanpassing nodig
-        guard !Preferences.shared.chargerMode else { return }
-
-        let knots = speedMs * 1.94384
-
-        let accuracy: CLLocationAccuracy
-        let filter: CLLocationDistance
-        let profile: String
-
-        switch knots {
-        case ..<0.5:
-            accuracy = kCLLocationAccuracyHundredMeters
-            filter   = 50
-            profile  = "stilliggend (<0.5kn) → 100m/50m"
-        case 0.5..<2.0:
-            accuracy = kCLLocationAccuracyNearestTenMeters
-            filter   = 10
-            profile  = "langzaam (0.5–2kn) → 10m/10m"
-        case 2.0..<6.0:
-            accuracy = kCLLocationAccuracyBest
-            filter   = 5
-            profile  = "varend (2–6kn) → best/5m"
-        default:
-            accuracy = kCLLocationAccuracyBest
-            filter   = 2
-            profile  = "snel (>6kn) → best/2m"
-        }
-
-        // Alleen updaten als het profiel veranderd is (voorkomt onnodige CLLocationManager-aanroepen)
-        if profile != currentGPSProfile {
-            currentGPSProfile = profile
-            locationManager.desiredAccuracy = accuracy
-            locationManager.distanceFilter  = filter
-            print("GPS profiel: \(profile)")
-        }
-    }
     
     /// Map View
     var map: GPXMapView
@@ -203,18 +154,23 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     /// Timestamp of the last received GPS location update. Used by watchdog to detect stale GPS.
     var lastGPSUpdateDate: Date?
 
+    /// Huidige GPS-accuraatheid profiel (voor logging / debug)
+    private var currentGPSProfile: String = ""
+    
     /// Name of the last file that was saved (without extension)
     var lastGpxFilename: String = "" {
         didSet {
             if lastGpxFilename == "" {
-                appTitleLabel.text = kAppTitle
+                appTitleLabel.text = ""
             } else {
                 // if name is too long arbitrary cut
                 var displayedName = lastGpxFilename
                 if lastGpxFilename.count > 20 {
                     displayedName = lastGpxFilename.prefix(10) + "..." + lastGpxFilename.suffix(3)
                 }
-                appTitleLabel.text = "  " + displayedName + ".gpx"
+                appTitleLabel.text = ""
+                // Toon bestandsnaam in middelste balk (tweede regel)
+                windInfoLabel.attributedText = self.bvkTitleAttributedText(subtitle: displayedName + ".gpx")
             }
         }
     }
@@ -338,7 +294,33 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     
     /// Label that displays current latitude and longitude (lat,long)
     var coordsLabel: UILabel
-    
+
+    /// Tweede info-rij: links — temperatuur + zichtbaarheid
+    var tempVisLabel: UILabel
+
+    /// Tweede info-rij: midden — luchtdruk + trend
+    var pressureLabel: UILabel
+
+    /// Tweede info-rij: rechts — golfhoogte + periode
+    var waveLabel: UILabel
+
+    /// Midden-kolom in de coördinaten-balk: wind (richting, Beaufort, knoten)
+    var windInfoLabel: UILabel
+
+    /// Timer that refreshes wind data every 5 minutes
+    var windUpdateTimer: Timer?
+
+    /// Rechter kolom in de coördinaten-balk: waterstand NAP (Rijkswaterstaat)
+    var waterInfoLabel: UILabel
+
+    /// Timer that refreshes waterstand every 10 minutes
+    var waterstandTimer: Timer?
+
+    /// Laatste windsnelheid (knoten) en richting (graden) voor stroming berekening
+    var lastWindSpeedKn: Double = 0
+    var lastWindDirDeg: Double = 0
+
+
     /// Displays current elapsed time (00:00)
     var timeLabel: UILabel
     
@@ -371,6 +353,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     
     /// Share current gpx file button
     var shareButton: UIButton
+
     
     /// Spinning Activity Indicator for shareButton
     let shareActivityIndicator: UIActivityIndicatorView
@@ -417,6 +400,11 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         self.signalImageView = UIImageView()
         self.signalAccuracyLabel = UILabel()
         self.coordsLabel = UILabel()
+        self.tempVisLabel = UILabel()
+        self.pressureLabel = UILabel()
+        self.waveLabel = UILabel()
+        self.windInfoLabel = UILabel()
+        self.waterInfoLabel = UILabel()
 
         self.timeLabel = UILabel()
         self.speedLabel = UILabel()
@@ -430,7 +418,6 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         self.aboutButton = UIButton(type: .custom)
         self.preferencesButton = UIButton(type: .custom)
         self.shareButton = UIButton(type: .custom)
-
         self.trackerButton = UIButton(type: .custom)
         self.saveButton = UIButton(type: .custom)
 
@@ -514,13 +501,17 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         
         locationManager.delegate = self
         locationManager.startUpdatingLocation()
+        startGPSWatchdog()
+        startWindTimer()
+        startWaterstandTimer()
         locationManager.startUpdatingHeading()
         startMapUpdateTimer()
-        startGPSWatchdog()
-        
+
         // Preferences
         map.tileServer = Preferences.shared.tileServer
         map.useCache = Preferences.shared.useCache
+        map.showWindOverlay = Preferences.shared.showWindOverlay
+        map.showOWMOverlay = Preferences.shared.showOWMOverlay
         useImperial = Preferences.shared.useImperial
         // LocationManager.activityType = Preferences.shared.locationActivityType
         
@@ -549,11 +540,10 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         let font12 = UIFont(name: "DinAlternate-Bold", size: 12.0)
         
         // Add the app title Label (Branding, branding, branding! )
-        appTitleLabel.text = kAppTitle
-        appTitleLabel.textAlignment = .left
-        appTitleLabel.font = UIFont.boldSystemFont(ofSize: 14)
-        appTitleLabel.textColor = UIColor.yellow
-        appTitleLabel.backgroundColor = UIColor(red: 58.0/255.0, green: 57.0/255.0, blue: 54.0/255.0, alpha: 0.80)
+        // appTitleLabel verborgen — titel staat nu in windInfoLabel (middelste kolom)
+        appTitleLabel.text = ""
+        appTitleLabel.isHidden = true
+        appTitleLabel.backgroundColor = .clear
         self.view.addSubview(appTitleLabel)
         
         // CoordLabel
@@ -620,6 +610,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         shareButton.addTarget(self, action: #selector(ViewController.openShare), for: .touchUpInside)
         shareButton.autoresizingMask = [.flexibleRightMargin]
         map.addSubview(shareButton)
+
         
         // Folder button
         let folderW: CGFloat = kButtonSmallSize
@@ -645,6 +636,62 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         signalAccuracyLabel.text = kUnknownAccuracyText
         signalAccuracyLabel.textAlignment = .center
         map.addSubview(signalAccuracyLabel)
+
+        // Tweede rij — gedeelde stijl
+        let kBarBg = UIColor(red: 58.0/255.0, green: 57.0/255.0, blue: 54.0/255.0, alpha: 0.80)
+        let kBarFont = UIFont(name: "DinAlternate-Bold", size: 16.0) ?? UIFont.systemFont(ofSize: 16)
+
+        tempVisLabel.font = kBarFont
+        tempVisLabel.textColor = .white
+        tempVisLabel.backgroundColor = kBarBg
+        tempVisLabel.textAlignment = .left
+        tempVisLabel.numberOfLines = 2
+        tempVisLabel.adjustsFontSizeToFitWidth = true
+        tempVisLabel.minimumScaleFactor = 0.7
+        tempVisLabel.text = "  --°C\n  -- km"
+        self.view.addSubview(tempVisLabel)
+
+        pressureLabel.font = kBarFont
+        pressureLabel.textColor = .white
+        pressureLabel.backgroundColor = kBarBg
+        pressureLabel.textAlignment = .center
+        pressureLabel.numberOfLines = 2
+        pressureLabel.adjustsFontSizeToFitWidth = true
+        pressureLabel.minimumScaleFactor = 0.7
+        pressureLabel.text = "---- hPa\n→ stabiel"
+        self.view.addSubview(pressureLabel)
+
+        waveLabel.font = kBarFont
+        waveLabel.textColor = .white
+        waveLabel.backgroundColor = kBarBg
+        waveLabel.textAlignment = .right
+        waveLabel.numberOfLines = 2
+        waveLabel.adjustsFontSizeToFitWidth = true
+        waveLabel.minimumScaleFactor = 0.7
+        waveLabel.text = "-- m\n-- s periode"
+        self.view.addSubview(waveLabel)
+
+        // Wind label — midden kolom in de coördinaten-balk
+        windInfoLabel.font = UIFont(name: "DinAlternate-Bold", size: 16.0) ?? UIFont.systemFont(ofSize: 16)
+        windInfoLabel.textColor = UIColor.white
+        windInfoLabel.backgroundColor = UIColor(red: 58.0/255.0, green: 57.0/255.0, blue: 54.0/255.0, alpha: 0.80)
+        windInfoLabel.textAlignment = .center
+        windInfoLabel.numberOfLines = 2
+        windInfoLabel.attributedText = bvkTitleAttributedText(subtitle: "-- · -- kn")
+        windInfoLabel.adjustsFontSizeToFitWidth = true
+        windInfoLabel.minimumScaleFactor = 0.7
+        self.view.addSubview(windInfoLabel)
+
+        // Waterstand label — rechter kolom in de coördinaten-balk
+        waterInfoLabel.font = UIFont(name: "DinAlternate-Bold", size: 16.0) ?? UIFont.systemFont(ofSize: 16)
+        waterInfoLabel.textColor = UIColor.white
+        waterInfoLabel.backgroundColor = UIColor(red: 58.0/255.0, green: 57.0/255.0, blue: 54.0/255.0, alpha: 0.80)
+        waterInfoLabel.textAlignment = .right
+        waterInfoLabel.numberOfLines = 2
+        waterInfoLabel.text = "--\n-- cm NAP"
+        waterInfoLabel.adjustsFontSizeToFitWidth = true
+        waterInfoLabel.minimumScaleFactor = 0.7
+        self.view.addSubview(waterInfoLabel)
 
         //
         // Button Bar
@@ -756,10 +803,44 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         NSLayoutConstraint(item: appTitleLabel, attribute: .top, relatedBy: .equal, toItem: safeAreaGuide, attribute: .top, multiplier: 1, constant: safeAreaInsets.top).isActive = true
         NSLayoutConstraint(item: appTitleLabel, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: appTitleLabel, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1, constant: 0).isActive = true
-        // coordsLabel: eigen rij direct onder appTitleLabel
+        NSLayoutConstraint(item: appTitleLabel, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: 0).isActive = true
+        // coordsLabel: linker kolom — vaste breedte 1/3 van scherm
         NSLayoutConstraint(item: coordsLabel, attribute: .top, relatedBy: .equal, toItem: appTitleLabel, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: coordsLabel, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: coordsLabel, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: coordsLabel, attribute: .width, relatedBy: .equal, toItem: self.view, attribute: .width, multiplier: 1.0/3.0, constant: 0).isActive = true
+
+        // windInfoLabel: midden kolom — gecentreerd
+        windInfoLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint(item: windInfoLabel, attribute: .top, relatedBy: .equal, toItem: appTitleLabel, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: windInfoLabel, attribute: .leading, relatedBy: .equal, toItem: coordsLabel, attribute: .trailing, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: windInfoLabel, attribute: .width, relatedBy: .equal, toItem: self.view, attribute: .width, multiplier: 1.0/3.0, constant: 0).isActive = true
+        NSLayoutConstraint(item: windInfoLabel, attribute: .height, relatedBy: .equal, toItem: coordsLabel, attribute: .height, multiplier: 1, constant: 0).isActive = true
+
+        // waterInfoLabel: rechter kolom — rechts uitgelijnd
+        waterInfoLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint(item: waterInfoLabel, attribute: .top, relatedBy: .equal, toItem: appTitleLabel, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: waterInfoLabel, attribute: .leading, relatedBy: .equal, toItem: windInfoLabel, attribute: .trailing, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: waterInfoLabel, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1, constant: -4).isActive = true
+        NSLayoutConstraint(item: waterInfoLabel, attribute: .height, relatedBy: .equal, toItem: coordsLabel, attribute: .height, multiplier: 1, constant: 0).isActive = true
+
+        // Tweede rij — direct onder de eerste balk
+        tempVisLabel.translatesAutoresizingMaskIntoConstraints = false
+        pressureLabel.translatesAutoresizingMaskIntoConstraints = false
+        waveLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint(item: tempVisLabel, attribute: .top, relatedBy: .equal, toItem: coordsLabel, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: tempVisLabel, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: tempVisLabel, attribute: .width, relatedBy: .equal, toItem: self.view, attribute: .width, multiplier: 1.0/3.0, constant: 0).isActive = true
+
+        NSLayoutConstraint(item: pressureLabel, attribute: .top, relatedBy: .equal, toItem: coordsLabel, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: pressureLabel, attribute: .leading, relatedBy: .equal, toItem: tempVisLabel, attribute: .trailing, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: pressureLabel, attribute: .width, relatedBy: .equal, toItem: self.view, attribute: .width, multiplier: 1.0/3.0, constant: 0).isActive = true
+        NSLayoutConstraint(item: pressureLabel, attribute: .height, relatedBy: .equal, toItem: tempVisLabel, attribute: .height, multiplier: 1, constant: 0).isActive = true
+
+        NSLayoutConstraint(item: waveLabel, attribute: .top, relatedBy: .equal, toItem: coordsLabel, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: waveLabel, attribute: .leading, relatedBy: .equal, toItem: pressureLabel, attribute: .trailing, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: waveLabel, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1, constant: -4).isActive = true
+        NSLayoutConstraint(item: waveLabel, attribute: .height, relatedBy: .equal, toItem: tempVisLabel, attribute: .height, multiplier: 1, constant: 0).isActive = true
     }
     
     /// Adds constraints to subviews forming the informational labels (top right side; i.e. speed, elapse time labels)
@@ -780,7 +861,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         NSLayoutConstraint(item: timeLabel, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1, constant: -7).isActive = true
         NSLayoutConstraint(item: timeLabel, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1, constant: kSignalViewOffset).isActive = true
         // self.topLayoutGuide takes care of the iPhone X safe area, iPhoneXdiff not needed
-        NSLayoutConstraint(item: timeLabel, attribute: .top, relatedBy: .equal, toItem: self.coordsLabel, attribute: .bottom, multiplier: 1, constant: 5).isActive = true
+        NSLayoutConstraint(item: timeLabel, attribute: .top, relatedBy: .equal, toItem: self.tempVisLabel, attribute: .bottom, multiplier: 1, constant: 5).isActive = true
         
         NSLayoutConstraint(item: speedLabel, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1, constant: -7).isActive = true
         NSLayoutConstraint(item: speedLabel, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1, constant: kSignalViewOffset).isActive = true
@@ -800,7 +881,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         signalAccuracyLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint(item: signalImageView, attribute: .centerX, relatedBy: .equal, toItem: safeAreaGuide, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: signalImageView, attribute: .top, relatedBy: .equal, toItem: self.coordsLabel, attribute: .bottom, multiplier: 1, constant: 5).isActive = true
+        NSLayoutConstraint(item: signalImageView, attribute: .top, relatedBy: .equal, toItem: self.tempVisLabel, attribute: .bottom, multiplier: 1, constant: 5).isActive = true
         NSLayoutConstraint(item: signalImageView, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: 50).isActive = true
         NSLayoutConstraint(item: signalImageView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: 30).isActive = true
         NSLayoutConstraint(item: signalAccuracyLabel, attribute: .centerX, relatedBy: .equal, toItem: safeAreaGuide, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
@@ -814,7 +895,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         aboutButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint(item: folderButton, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1, constant: 5).isActive = true
-        NSLayoutConstraint(item: folderButton, attribute: .top, relatedBy: .equal, toItem: coordsLabel, attribute: .bottom, multiplier: 1, constant: 5).isActive = true
+        NSLayoutConstraint(item: folderButton, attribute: .top, relatedBy: .equal, toItem: tempVisLabel, attribute: .bottom, multiplier: 1, constant: 5).isActive = true
         NSLayoutConstraint(item: folderButton, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: kButtonSmallSize).isActive = true
         NSLayoutConstraint(item: folderButton, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: kButtonSmallSize).isActive = true
         
@@ -1041,6 +1122,8 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         locationManager.startUpdatingHeading()
         startMapUpdateTimer()
         startGPSWatchdog()
+        startWindTimer()
+        startWaterstandTimer()
     }
 
     ///
@@ -1058,8 +1141,10 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
             stopGPSWatchdog()
         }
         stopMapUpdateTimer()
+        stopWindTimer()
+        stopWaterstandTimer()
     }
-    
+
     ///
     /// Actions to do when the app will terminate
     ///
@@ -1092,7 +1177,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         let navController = UINavigationController(rootViewController: vc)
         self.present(navController, animated: true) { () -> Void in }
     }
-    
+
     ///
     /// Opens Preferences table view controller
     ///
@@ -1473,6 +1558,198 @@ extension ViewController {
         gpsWatchdogTimer = nil
     }
 
+    // MARK: - Waterstand (Rijkswaterstaat DDAPI)
+
+    /// Start waterstand timer — haalt elke 10 minuten verse waterstand op.
+    func startWaterstandTimer() {
+        fetchWaterstand()
+        waterstandTimer?.invalidate()
+        waterstandTimer = Timer.scheduledTimer(withTimeInterval: 600.0, repeats: true) { [weak self] _ in
+            self?.fetchWaterstand()
+        }
+    }
+
+    func stopWaterstandTimer() {
+        waterstandTimer?.invalidate()
+        waterstandTimer = nil
+    }
+
+    /// Haalt actuele waterstand op via Rijkswaterstaat DDAPI.
+    /// Meetpunt: IJmuiden (start/finish RHN, Noord-Hollandse kust).
+    func fetchWaterstand() {
+        let now = Date()
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        let begin = formatter.string(from: now.addingTimeInterval(-1800)) // 30 min geleden
+        let end   = formatter.string(from: now)
+
+        let url = URL(string: "https://ddapi20-waterwebservices.rijkswaterstaat.nl/ONLINEWAARNEMINGENSERVICES/OphalenWaarnemingen")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("RHNTracker", forHTTPHeaderField: "X-API-KEY")
+        let body: [String: Any] = [
+            "Locatie": ["Code": "ijmuiden"],
+            "AquoPlusWaarnemingMetadata": ["AquoMetadata": [
+                "Compartiment": ["Code": "OW"],
+                "Grootheid":    ["Code": "WATHTE"]
+            ]],
+            "Periode": ["Begindatumtijd": begin, "Einddatumtijd": end]
+        ]
+        request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+
+        URLSession.shared.dataTask(with: request) { [weak self] data, _, error in
+            guard let self = self, let data = data, error == nil else { return }
+            guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                  let lijst = json["WaarnemingenLijst"] as? [[String: Any]],
+                  let metingen = lijst.first?["MetingenLijst"] as? [[String: Any]],
+                  let laatste = metingen.last,
+                  let meetwaarde = laatste["Meetwaarde"] as? [String: Any],
+                  let waarde = meetwaarde["Waarde_Numeriek"] as? Double else { return }
+            let nap = String(format: "%+.0f", waarde)
+            DispatchQueue.main.async {
+                self.waterInfoLabel.text = "IJmuiden\n\(nap) cm NAP"
+            }
+        }.resume()
+    }
+
+    // MARK: - Weer extra (temp, druk, zicht, golven)
+
+    func fetchExtraWeatherData() {
+        let lat = locationManager.location?.coordinate.latitude ?? 52.4630
+        let lon = locationManager.location?.coordinate.longitude ?? 4.5480
+
+        // Open-Meteo: temp, zicht, druk (huidig + 3u trend)
+        let weatherURL = URL(string: "https://api.open-meteo.com/v1/forecast?latitude=\(lat)&longitude=\(lon)&current=temperature_2m,apparent_temperature,visibility,surface_pressure,cloud_cover&hourly=surface_pressure&past_hours=3&forecast_hours=1&timezone=Europe%2FAmsterdam")!
+        URLSession.shared.dataTask(with: weatherURL) { [weak self] data, _, _ in
+            guard let self = self, let data = data,
+                  let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                  let cur = json["current"] as? [String: Any] else { return }
+            let temp   = cur["temperature_2m"] as? Double ?? 0
+            let feels  = cur["apparent_temperature"] as? Double ?? 0
+            let vis    = (cur["visibility"] as? Double ?? 0) / 1000.0
+            let press  = cur["surface_pressure"] as? Double ?? 0
+            // Luchtdruk trend uit hourly
+            var trend = "→"
+            if let hourly = json["hourly"] as? [String: Any],
+               let pressures = hourly["surface_pressure"] as? [Double], pressures.count >= 3 {
+                let diff = pressures.last! - pressures.first!
+                trend = diff > 0.5 ? "▲" : diff < -0.5 ? "▼" : "→"
+            }
+            DispatchQueue.main.async {
+                self.tempVisLabel.text = "  \(String(format: "%.1f", temp))° / \(String(format: "%.1f", feels))°\n  \(String(format: "%.1f", vis)) km"
+                self.pressureLabel.text = "\(String(format: "%.0f", press)) hPa\n\(trend) \(trend == "▲" ? "stijgend" : trend == "▼" ? "dalend" : "stabiel")"
+            }
+        }.resume()
+
+        // Open-Meteo Marine: golfhoogte + periode
+        let marineURL = URL(string: "https://marine-api.open-meteo.com/v1/marine?latitude=\(lat)&longitude=\(lon)&current=wave_height,wave_period&timezone=Europe%2FAmsterdam")!
+        URLSession.shared.dataTask(with: marineURL) { [weak self] data, _, _ in
+            guard let self = self, let data = data,
+                  let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                  let cur = json["current"] as? [String: Any] else { return }
+            let waveH = cur["wave_height"] as? Double ?? 0
+            let waveP = cur["wave_period"] as? Double ?? 0
+            DispatchQueue.main.async {
+                self.waveLabel.text = "\(String(format: "%.1f", waveH))m\n\(String(format: "%.1f", waveP))s periode"
+            }
+        }.resume()
+    }
+
+    // MARK: - Radar (Rainviewer)
+
+    // MARK: - Wind (Open-Meteo)
+
+    /// Start wind update timer — haalt elke 5 minuten verse winddata op.
+    func startWindTimer() {
+        fetchWindData()
+        fetchExtraWeatherData()
+        windUpdateTimer?.invalidate()
+        windUpdateTimer = Timer.scheduledTimer(withTimeInterval: 300.0, repeats: true) { [weak self] _ in
+            self?.fetchWindData()
+            self?.fetchExtraWeatherData()
+        }
+    }
+
+    func stopWindTimer() {
+        windUpdateTimer?.invalidate()
+        windUpdateTimer = nil
+    }
+
+    /// Haalt actuele wind op via Open-Meteo op basis van huidige locatie (of vaste haven als fallback).
+    func fetchWindData() {
+        let location = locationManager.location?.coordinate
+        let lat = location?.latitude ?? 52.4630
+        let lon = location?.longitude ?? 4.5480
+        let urlStr = "https://api.open-meteo.com/v1/forecast?latitude=\(lat)&longitude=\(lon)&current=wind_speed_10m,wind_direction_10m,wind_gusts_10m&wind_speed_unit=kn"
+        guard let url = URL(string: urlStr) else { return }
+        URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
+            guard let self = self, let data = data, error == nil else { return }
+            guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                  let current = json["current"] as? [String: Any],
+                  let speedKn = current["wind_speed_10m"] as? Double,
+                  let dirDeg = current["wind_direction_10m"] as? Double else { return }
+            let gusts = (current["wind_gusts_10m"] as? Double) ?? 0.0
+            let bft = self.knotsToBeaufort(speedKn)
+            let arrow = self.windArrow(degrees: dirDeg)
+            let gustStr = gusts > 0 ? String(format: " (%.0f)", gusts) : ""
+            let subtitle = "\(arrow) Bft \(bft) · \(String(format: "%.1f", speedKn))\(gustStr) kn"
+            let coord = self.locationManager.location?.coordinate ?? CLLocationCoordinate2D(latitude: 52.4630, longitude: 4.5480)
+            self.lastWindSpeedKn = speedKn
+            self.lastWindDirDeg = dirDeg
+            DispatchQueue.main.async {
+                self.windInfoLabel.attributedText = self.bvkTitleAttributedText(subtitle: subtitle)
+                self.map.updateWindAnnotation(coordinate: coord, direction: dirDeg, beaufort: bft, speedKn: speedKn)
+                self.updateStromingLabel()
+            }
+        }.resume()
+    }
+
+    /// Berekent windgedreven stroming voor de Noord-Hollandse kust en toont in waveLabel.
+    /// Kuststroming ≈ 2% van windsnelheid, richting ≈ windrichting.
+    func updateStromingLabel() {
+        let stromingKn = lastWindSpeedKn * 0.02
+        let arrow = windArrow(degrees: lastWindDirDeg)
+        let waveText = waveLabel.text?.components(separatedBy: "\n").first ?? "--"
+        waveLabel.text = "\(waveText)\n\(arrow) \(String(format: "%.2f", stromingKn)) kn stroom"
+    }
+
+    /// Maakt NSAttributedString met "RHN GPX TRACKER" in geel en subtitle in wit.
+    func bvkTitleAttributedText(subtitle: String) -> NSAttributedString {
+        let font = UIFont(name: "DinAlternate-Bold", size: 16.0) ?? UIFont.systemFont(ofSize: 16)
+        let title = NSMutableAttributedString(string: "RHN GPX TRACKER\n",
+            attributes: [.foregroundColor: UIColor.yellow, .font: font])
+        title.append(NSAttributedString(string: subtitle,
+            attributes: [.foregroundColor: UIColor.white, .font: font]))
+        return title
+    }
+
+    /// Converteert knopen naar Beaufort-schaal.
+    func knotsToBeaufort(_ knots: Double) -> Int {
+        switch knots {
+        case ..<1:    return 0
+        case ..<4:    return 1
+        case ..<7:    return 2
+        case ..<11:   return 3
+        case ..<17:   return 4
+        case ..<22:   return 5
+        case ..<28:   return 6
+        case ..<34:   return 7
+        case ..<41:   return 8
+        case ..<48:   return 9
+        case ..<56:   return 10
+        case ..<64:   return 11
+        default:      return 12
+        }
+    }
+
+    /// Geeft een richtingspijl terug op basis van graden (vanwaar de wind komt).
+    func windArrow(degrees: Double) -> String {
+        let dirs = ["↓","↙","←","↖","↑","↗","→","↘"]
+        let index = Int((degrees + 22.5) / 45.0) % 8
+        return dirs[index]
+    }
+
     /// Adjusts the visible map region based on the average speed over the last 60 seconds.
     /// Runs independently of the GPX recording interval so tiles always preload ahead.
     ///
@@ -1609,6 +1886,67 @@ extension ViewController: PreferencesTableViewControllerDelegate {
             currentGPSProfile = ""
         }
     }
+
+    func didUpdateShowWindOverlay(_ newValue: Bool) {
+        print("PreferencesTableViewControllerDelegate:: didUpdateShowWindOverlay: \(newValue)")
+        map.showWindOverlay = newValue
+    }
+
+    func didUpdateShowOWMOverlay(_ newValue: Bool, layer: OWMLayer) {
+        Preferences.shared.owmLayer = layer
+        if newValue {
+            map.showOWMOverlay = false   // reset zodat didSet altijd vuurt
+            map.showOWMOverlay = true
+        } else {
+            map.showOWMOverlay = false
+        }
+    }
+
+    /// Pas GPS-accuraatheid en distanceFilter aan op basis van snelheid.
+    /// Dit bespaart 60-80% batterij bij stilliggen of langzaam varen.
+    ///
+    /// Profielen (snelheid in knopen):
+    ///   < 0.5 kn  → HundredMeters  + 50m filter  (GPS-chip uit, cel/wifi)
+    ///   0.5–2 kn  → TenMeters      + 10m filter  (GPS-chip aan, minder agressief)
+    ///   2–6 kn    → Best           +  5m filter  (volle GPS)
+    ///   > 6 kn    → Best           +  2m filter  (volle GPS, max resolutie)
+    private func updateGPSAccuracy(speedMs: Double) {
+        // Charger mode: altijd best, geen aanpassing nodig
+        guard !Preferences.shared.chargerMode else { return }
+
+        let knots = speedMs * 1.94384
+
+        let accuracy: CLLocationAccuracy
+        let filter: CLLocationDistance
+        let profile: String
+
+        switch knots {
+        case ..<0.5:
+            accuracy = kCLLocationAccuracyHundredMeters
+            filter   = 50
+            profile  = "stilliggend (<0.5kn) → 100m/50m"
+        case 0.5..<2.0:
+            accuracy = kCLLocationAccuracyNearestTenMeters
+            filter   = 10
+            profile  = "langzaam (0.5–2kn) → 10m/10m"
+        case 2.0..<6.0:
+            accuracy = kCLLocationAccuracyBest
+            filter   = 5
+            profile  = "varend (2–6kn) → best/5m"
+        default:
+            accuracy = kCLLocationAccuracyBest
+            filter   = 2
+            profile  = "snel (>6kn) → best/2m"
+        }
+
+        // Alleen updaten als het profiel veranderd is (voorkomt onnodige CLLocationManager-aanroepen)
+        if profile != currentGPSProfile {
+            currentGPSProfile = profile
+            locationManager.desiredAccuracy = accuracy
+            locationManager.distanceFilter  = filter
+            print("GPS profiel: \(profile)")
+        }
+    }
 }
 
 /// Extends `ViewController`` to support `GPXFilesTableViewControllerDelegate` function
@@ -1692,6 +2030,11 @@ extension ViewController: CLLocationManagerDelegate {
         // Update signal image accuracy
         let newLocation = locations.first!
 
+        // Verplaats windpijl mee met GPS positie
+        if map.showWindOverlay, let wind = map.windAnnotation {
+            wind.coordinate = newLocation.coordinate
+        }
+
         if newLocation.speed >= 0 {
             speedReadings.append((date: Date(), speedMs: newLocation.speed))
             // Pas GPS-accuraatheid aan op snelheid (batterijbesparing)
@@ -1721,7 +2064,7 @@ extension ViewController: CLLocationManagerDelegate {
         let lonFormat = String(format: "%.6f", newLocation.coordinate.longitude)
         let altitude = newLocation.altitude.toAltitude(useImperial: useImperial)
         let knots = newLocation.speed >= 0 ? String(format: "%.1f kn", newLocation.speed * 1.94384) : "·.· kn"
-        coordsLabel.text = "  Lat  \(latFormat)   Lon  \(lonFormat)\n  Alt  \(altitude)   \(knots)"
+        coordsLabel.text = "  Lat  \(latFormat)\n  Lon  \(lonFormat)"
         
         // Update speed
         speedLabel.text = (newLocation.speed < 0) ? kUnknownSpeedText : newLocation.speed.toSpeed(useImperial: useImperial)

@@ -44,11 +44,23 @@ let kDefaultsKeyKeepScreenAlwaysOn: String = "KeepScreenAlwaysOn"
 
 let kDefaultsKeyShowScaleBar: String = "ShowScaleBar"
 
+/// Key on Defaults for the trackpoint recording interval in seconds.
+let kDefaultsKeyTrackInterval: String = "TrackIntervalSeconds"
+
 /// Key on Defaults for charger mode (always best GPS + max zoom).
 let kDefaultsKeyChargerMode: String = "ChargerMode"
 
-/// Key on Defaults for the trackpoint recording interval in seconds.
-let kDefaultsKeyTrackInterval: String = "TrackIntervalSeconds"
+/// Key on Defaults for wind overlay toggle.
+let kDefaultsKeyShowWindOverlay: String = "ShowWindOverlay"
+
+/// Key on Defaults for OpenWeatherMap API key.
+let kDefaultsKeyOWMApiKey: String = "OWMApiKey"
+
+/// Key on Defaults for OpenWeatherMap selected layer.
+let kDefaultsKeyOWMLayer: String = "OWMLayer"
+
+/// Key on Defaults for OWM overlay toggle.
+let kDefaultsKeyShowOWMOverlay: String = "ShowOWMOverlay"
 
 /// A class to handle app preferences in one single place.
 /// When the app starts for the first time the following preferences are set:
@@ -98,15 +110,23 @@ class Preferences: NSObject {
     
     ///
     private var _keepScreenAlwaysOn: Bool = true
-
+    
     ///
     private var _showScaleBar: Bool = true
+
+    /// Trackpoint recording interval in seconds. Default 1 second.
+    private var _trackIntervalSeconds: Double = 1.0
 
     /// Charger mode: altijd hoogste GPS-nauwkeurigheid + maximale kaart-zoom (standaard uit)
     private var _chargerMode: Bool = false
 
-    /// Trackpoint recording interval in seconds. Default 1 second.
-    private var _trackIntervalSeconds: Double = 1.0
+    /// Wind overlay: toon windtile laag op de kaart (standaard uit)
+    private var _showWindOverlay: Bool = false
+
+    /// Rain radar overlay: toon neerslag radar op de kaart (standaard uit)
+    private var _owmApiKey: String = ""
+    private var _owmLayer: String = "precipitation_new"
+    private var _showOWMOverlay: Bool = false
 
     /// UserDefaults.standard shortcut
     private let defaults = UserDefaults.standard
@@ -195,17 +215,32 @@ class Preferences: NSObject {
             print("** Preferences:: loaded preference from defaults showScaleBar \(showScaleBarBool)")
         }
 
+        // load previous trackpoint interval
+        if let trackIntervalDouble = defaults.object(forKey: kDefaultsKeyTrackInterval) as? Double {
+            _trackIntervalSeconds = max(1.0, trackIntervalDouble)
+            print("** Preferences:: loaded preference from defaults trackIntervalSeconds \(_trackIntervalSeconds)")
+        }
+
         // load charger mode preference
         if let chargerModeBool = defaults.object(forKey: kDefaultsKeyChargerMode) as? Bool {
             _chargerMode = chargerModeBool
             print("** Preferences:: loaded preference from defaults chargerMode \(chargerModeBool)")
         }
 
-        // load previous trackpoint interval
-        if let trackIntervalDouble = defaults.object(forKey: kDefaultsKeyTrackInterval) as? Double {
-            _trackIntervalSeconds = max(1.0, trackIntervalDouble)
-            print("** Preferences:: loaded preference from defaults trackIntervalSeconds \(_trackIntervalSeconds)")
+        // load wind overlay preference
+        if let showWindOverlayBool = defaults.object(forKey: kDefaultsKeyShowWindOverlay) as? Bool {
+            _showWindOverlay = showWindOverlayBool
+            print("** Preferences:: loaded preference from defaults showWindOverlay \(showWindOverlayBool)")
         }
+
+        // load radar overlay preference
+        if let owmKey = defaults.string(forKey: kDefaultsKeyOWMApiKey) { _owmApiKey = owmKey }
+        if let owmLayer = defaults.string(forKey: kDefaultsKeyOWMLayer) { _owmLayer = owmLayer }
+        if let showOWM = defaults.object(forKey: kDefaultsKeyShowOWMOverlay) as? Bool { _showOWMOverlay = showOWM }
+        if false {
+            // voormalige Rainviewer keys — niet meer gebruikt
+        }
+
 
     }
     
@@ -363,6 +398,16 @@ class Preferences: NSObject {
             print("** Preferences:: setting showScaleBar: \(newValue)")
         }
     }
+    
+    /// Gets and sets the trackpoint recording interval in seconds (minimum 1).
+    var trackIntervalSeconds: Double {
+        get { return _trackIntervalSeconds }
+        set {
+            _trackIntervalSeconds = max(1.0, newValue)
+            defaults.set(_trackIntervalSeconds, forKey: kDefaultsKeyTrackInterval)
+            print("** Preferences:: setting trackIntervalSeconds: \(_trackIntervalSeconds)")
+        }
+    }
 
     /// Charger mode: altijd hoogste GPS-nauwkeurigheid + maximale kaart-zoom.
     /// Gebruik als de telefoon op de lader ligt. Schakelt snelheidsgebaseerde GPS-besparing uit.
@@ -377,14 +422,30 @@ class Preferences: NSObject {
         }
     }
 
-    /// Gets and sets the trackpoint recording interval in seconds (minimum 1).
-    var trackIntervalSeconds: Double {
-        get { return _trackIntervalSeconds }
+    /// Wind overlay aan/uit op de kaart.
+    var showWindOverlay: Bool {
+        get { return _showWindOverlay }
         set {
-            _trackIntervalSeconds = max(1.0, newValue)
-            defaults.set(_trackIntervalSeconds, forKey: kDefaultsKeyTrackInterval)
-            print("** Preferences:: setting trackIntervalSeconds: \(_trackIntervalSeconds)")
+            _showWindOverlay = newValue
+            defaults.set(newValue, forKey: kDefaultsKeyShowWindOverlay)
+            print("** Preferences:: setting showWindOverlay: \(newValue)")
         }
+    }
+
+    /// Rain radar overlay aan/uit op de kaart.
+    var owmApiKey: String {
+        get { return _owmApiKey }
+        set { _owmApiKey = newValue; defaults.set(newValue, forKey: kDefaultsKeyOWMApiKey) }
+    }
+
+    var owmLayerRawValue: String {
+        get { return _owmLayer }
+        set { _owmLayer = newValue; defaults.set(newValue, forKey: kDefaultsKeyOWMLayer) }
+    }
+
+    var showOWMOverlay: Bool {
+        get { return _showOWMOverlay }
+        set { _showOWMOverlay = newValue; defaults.set(newValue, forKey: kDefaultsKeyShowOWMOverlay) }
     }
 
     var gpxFilesFolderURL: URL? {

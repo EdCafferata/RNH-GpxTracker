@@ -118,6 +118,72 @@ class GPXMapView: MKMapView {
     
     /// Overlay that holds map tiles
     var tileServerOverlay: MKTileOverlay = MKTileOverlay()
+
+    /// OpenWeatherMap kaartlaag overlay
+    var owmTileOverlay: OWMTileOverlay?
+
+    /// Toggles de OWM overlay aan/uit op de kaart.
+    var showOWMOverlay: Bool = false {
+        didSet {
+            if let existing = owmTileOverlay {
+                removeOverlay(existing)
+                owmTileOverlay = nil
+            }
+            if showOWMOverlay {
+                let prefs = Preferences.shared
+                guard !prefs.owmApiKey.isEmpty else { return }
+                let overlay = OWMTileOverlay.make(layer: prefs.owmLayer, apiKey: prefs.owmApiKey)
+                owmTileOverlay = overlay
+                addOverlayOnTop(overlay)
+            }
+        }
+    }
+
+    /// Ververst de OWM overlay (bij wisselen van laag of API key).
+    func refreshOWMOverlay() {
+        guard showOWMOverlay else { return }
+        showOWMOverlay = false
+        showOWMOverlay = true
+    }
+
+    /// Wind annotatie op de kaart (pijl op huidige GPS positie)
+    var windAnnotation: WindAnnotation?
+
+    /// Toggles de windpijl aan/uit op de kaart.
+    var showWindOverlay: Bool = false {
+        didSet {
+            if showWindOverlay {
+                if windAnnotation == nil {
+                    let annotation = WindAnnotation(coordinate: userLocation.coordinate)
+                    windAnnotation = annotation
+                    addAnnotation(annotation)
+                }
+            } else {
+                if let annotation = windAnnotation {
+                    removeAnnotation(annotation)
+                    windAnnotation = nil
+                }
+            }
+        }
+    }
+
+    /// Update windpijl positie naar huidige GPS locatie en herteken.
+    func updateWindAnnotation(coordinate: CLLocationCoordinate2D, direction: Double, beaufort: Int, speedKn: Double) {
+        guard showWindOverlay else { return }
+        if windAnnotation == nil {
+            let annotation = WindAnnotation(coordinate: coordinate)
+            windAnnotation = annotation
+            addAnnotation(annotation)
+        }
+        windAnnotation?.coordinate = coordinate
+        windAnnotation?.directionDegrees = direction
+        windAnnotation?.beaufort = beaufort
+        windAnnotation?.speedKn = speedKn
+        // Herteken via de annotationView
+        if let view = view(for: windAnnotation!) as? WindAnnotationView {
+            view.update(direction: direction, beaufort: beaufort, speedKn: speedKn)
+        }
+    }
     
     ///
     let coreDataHelper = CoreDataHelper()

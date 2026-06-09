@@ -17,6 +17,14 @@ class MapViewDelegate: NSObject, MKMapViewDelegate, UIAlertViewDelegate {
         if annotation.isKind(of: MKUserLocation.self) {
             return nil
         }
+        // Wind annotatie — eigen pijl view
+        if let windAnnotation = annotation as? WindAnnotation {
+            let view = mapView.dequeueReusableAnnotationView(
+                withIdentifier: WindAnnotationView.reuseIdentifier) as? WindAnnotationView
+                ?? WindAnnotationView(annotation: windAnnotation, reuseIdentifier: WindAnnotationView.reuseIdentifier)
+            view.annotation = windAnnotation
+            return view
+        }
         let annotationView: MKPinAnnotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "PinView")
         annotationView.canShowCallout = true
         annotationView.isDraggable = true
@@ -38,8 +46,18 @@ class MapViewDelegate: NSObject, MKMapViewDelegate, UIAlertViewDelegate {
     
     /// Displays the line for each segment
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-        if overlay.isKind(of: MKTileOverlay.self) {
-            return mapView.mapCacheRenderer(forOverlay: overlay)
+        if let tileOverlay = overlay as? MKTileOverlay {
+            // OWM overlay — eigen renderer, geen MapCache
+            if tileOverlay is OWMTileOverlay {
+                return MKTileOverlayRenderer(tileOverlay: tileOverlay)
+            }
+            // Alleen de tileServerOverlay van GPXMapView mag door MapCache
+            if let gpxMap = mapView as? GPXMapView,
+               overlay === gpxMap.tileServerOverlay {
+                return mapView.mapCacheRenderer(forOverlay: overlay)
+            }
+            // Alle andere tile overlays (wind etc.) — directe renderer
+            return MKTileOverlayRenderer(tileOverlay: tileOverlay)
         }
         
         if overlay is MKPolyline {
