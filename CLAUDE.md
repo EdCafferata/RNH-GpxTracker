@@ -1,4 +1,4 @@
-# RHN Tracker — Claude instructies
+# RNH Tracker — Claude instructies
 
 ## Projectoverzicht
 iOS + WatchOS GPX tracker app voor RHN (Ronde om Noord Holland).
@@ -123,7 +123,7 @@ Strings in `OpenRHNTracker/<taal>.lproj/Localizable.strings`
 ## Nieuw in v2.1.0 (in ontwikkeling, nog niet uitgebracht)
 - [x] **Snelheidsgebaseerde GPS-accuraatheid** — 4 profielen, tot 80% batterijbesparing — commit `d35bcf1`
 - [x] **'Telefoon op de lader' modus** — Settings → Tracking, altijd best GPS + 2m filter — commit `73415dc`
-- [x] About-scherm: BVK → Open RHN Tracker — commit `de114e2`
+- [x] About-scherm: BVK → Open RNH Tracker — commit `de114e2`
 - [x] README: live badge, correcte App Store URL — commit `1b3b6d4`
 
 ## Open issues (backlog)

@@ -1,4 +1,4 @@
-# RHN Tracker 🚤
+# RNH Tracker 🚤
 
 [![Available on the App Store](https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg)](https://apps.apple.com/nl/app/rhn-tracker/id1598986930)
 ![Versie](https://img.shields.io/badge/versie-2.0.0-blue)
@@ -92,7 +92,7 @@ open OpenRHNTracker.xcodeproj
 
 ## Licentie
 
-Open RHN Tracker — gebaseerd op [Open GPX Tracker](https://github.com/merlos/iOS-Open-GPX-Tracker) door Juan M. Merlos.
+Open RNH Tracker — gebaseerd op [Open GPX Tracker](https://github.com/merlos/iOS-Open-GPX-Tracker) door Juan M. Merlos.
 Uitgebracht onder de **GNU General Public License v3.0**.
 
 Gebruikt:

@@ -1,4 +1,4 @@
-# App Store Beschrijving — RHN Tracker
+# App Store Beschrijving — RNH Tracker
 
 ---
 
@@ -13,7 +13,7 @@ GPS tracker for the Ronde om Noord Holland. Smart battery saving, OpenSeaMap, Ap
 ---
 
 Kopieer de beschrijving naar App Store Connect:
-Mijn apps → RHN Tracker → App Store pagina → Beschrijving
+Mijn apps → RNH Tracker → App Store pagina → Beschrijving
 
 ---
 
@@ -114,7 +114,7 @@ Available in 11 languages: Dutch, English, German, Spanish, French, Italian, Fin
 ## Instructies App Store Connect
 
 1. Ga naar appstoreconnect.apple.com
-2. Mijn apps → RHN Tracker → versie 2.0.0 (of de actieve versie)
+2. Mijn apps → RNH Tracker → versie 2.0.0 (of de actieve versie)
 3. Klik op de NL-vlag → plak de Nederlandse tekst in het veld "Beschrijving"
 4. Klik op de EN-vlag → plak de Engelse tekst
 5. Sla op

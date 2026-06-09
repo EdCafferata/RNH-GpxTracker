@@ -16,7 +16,7 @@ import CoreGPX
 
 /// App title
 
-let kAppTitle: String = "  RHN GPX TRACKER"
+let kAppTitle: String = "  RNH GPX TRACKER"
 /// Purple color for button background
 let kPurpleButtonBackgroundColor: UIColor =  UIColor(red: 146.0/255.0, green: 166.0/255.0, blue: 218.0/255.0, alpha: 0.90)
 
@@ -1575,7 +1575,7 @@ extension ViewController {
     }
 
     /// Haalt actuele waterstand op via Rijkswaterstaat DDAPI.
-    /// Meetpunt: IJmuiden (start/finish RHN, Noord-Hollandse kust).
+    /// Meetpunt: IJmuiden (start/finish RNH, Noord-Hollandse kust).
     func fetchWaterstand() {
         let now = Date()
         let formatter = ISO8601DateFormatter()
@@ -1587,7 +1587,7 @@ extension ViewController {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("RHNTracker", forHTTPHeaderField: "X-API-KEY")
+        request.setValue("RNHTracker", forHTTPHeaderField: "X-API-KEY")
         let body: [String: Any] = [
             "Locatie": ["Code": "ijmuiden"],
             "AquoPlusWaarnemingMetadata": ["AquoMetadata": [
@@ -1714,10 +1714,10 @@ extension ViewController {
         waveLabel.text = "\(waveText)\n\(arrow) \(String(format: "%.2f", stromingKn)) kn stroom"
     }
 
-    /// Maakt NSAttributedString met "RHN GPX TRACKER" in geel en subtitle in wit.
+    /// Maakt NSAttributedString met "RNH GPX TRACKER" in geel en subtitle in wit.
     func bvkTitleAttributedText(subtitle: String) -> NSAttributedString {
         let font = UIFont(name: "DinAlternate-Bold", size: 16.0) ?? UIFont.systemFont(ofSize: 16)
-        let title = NSMutableAttributedString(string: "RHN GPX TRACKER\n",
+        let title = NSMutableAttributedString(string: "RNH GPX TRACKER\n",
             attributes: [.foregroundColor: UIColor.yellow, .font: font])
         title.append(NSAttributedString(string: subtitle,
             attributes: [.foregroundColor: UIColor.white, .font: font]))

@@ -1,9 +1,9 @@
-# Release Notes — RHN Tracker v2.1.0
+# Release Notes — RNH Tracker v2.1.0
 
 Wijzigingen na v2.0.0 (live in App Store).
 
 Kopieer naar App Store Connect:
-Mijn apps → RHN Tracker → versie 2.1 → "Wat is er nieuw"
+Mijn apps → RNH Tracker → versie 2.1 → "Wat is er nieuw"
 
 ---
 

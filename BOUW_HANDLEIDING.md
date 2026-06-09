@@ -1,6 +1,6 @@
 # Bouwhandleiding: iOS GPX Tracker klonen en aanpassen
 
-Dit document beschrijft **alle stappen** die zijn uitgevoerd om de RHN Tracker te maken
+Dit document beschrijft **alle stappen** die zijn uitgevoerd om de RNH Tracker te maken
 op basis van [iOS-Open-GPX-Tracker](https://github.com/merlos/iOS-Open-GPX-Tracker) van Juan M. Merlos.
 Volg deze handleiding op een nieuwe Mac om een volledig werkende aangepaste versie te bouwen.
 
@@ -737,7 +737,7 @@ canvas.save("AppStore/Screenshots/appstore_icon_1024x1024.png", "PNG")
 | Watch 38mm | `watch_38mm_272x340.png` | 272×340 | Optioneel |
 | App Store icoon | `appstore_icon_1024x1024.png` | 1024×1024 | ✅ Ja |
 
-> Alle gegenereerde bestanden voor RHN Tracker staan in `AppStore/Screenshots/`.
+> Alle gegenereerde bestanden voor RNH Tracker staan in `AppStore/Screenshots/`.
 
 ---
 
