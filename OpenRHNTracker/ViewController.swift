@@ -91,15 +91,26 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
                 print("followUser=true")
                 followUserButton.setImage(UIImage(named: "follow_user_high"), for: UIControl.State())
                 map.setCenter((map.userLocation.coordinate), animated: true)
-                
+                // Herstel course-up als we al een heading hebben
+                if let heading = lastTrueHeading {
+                    let camera = map.camera
+                    camera.heading = heading
+                    map.setCamera(camera, animated: true)
+                }
             } else {
                 print("followUser=false")
-               followUserButton.setImage(UIImage(named: "follow_user"), for: UIControl.State())
+                followUserButton.setImage(UIImage(named: "follow_user"), for: UIControl.State())
+                // Terug naar north-up
+                let camera = map.camera
+                camera.heading = 0
+                map.setCamera(camera, animated: true)
             }
-            
         }
     }
-    
+
+    /// Last known true heading (degrees). Nil totdat CLLocationManager heading-updates binnenkomen.
+    var lastTrueHeading: CLLocationDirection? = nil
+
     /// TBD (not currently used)
     var followUserBeforePinchGesture = true
 
@@ -1742,7 +1753,14 @@ extension ViewController: CLLocationManagerDelegate {
         print("mkMapcamera heading=\(map.camera.heading)")
         map.heading = newHeading // updates heading variable
         map.updateHeading() // updates heading view's rotation
-        
+
+        // Course-up: draai de kaartcamera mee met rijrichting als followUser actief is
+        let trueHeading = newHeading.trueHeading
+        guard trueHeading >= 0, followUser else { return }
+        lastTrueHeading = trueHeading
+        let camera = map.camera
+        camera.heading = trueHeading
+        map.setCamera(camera, animated: true)
     }
     
     ///
