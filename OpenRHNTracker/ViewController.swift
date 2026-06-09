@@ -319,6 +319,9 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     /// Laatste windsnelheid (knoten) en richting (graden) voor stroming berekening
     var lastWindSpeedKn: Double = 0
     var lastWindDirDeg: Double = 0
+    var lastPrecipitationMmH: Double = 0
+    var lastWaveHeightM: Double = 0
+    var owmLegendView: OWMLegendView?
 
 
     /// Displays current elapsed time (00:00)
@@ -665,7 +668,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         waveLabel.textColor = .white
         waveLabel.backgroundColor = kBarBg
         waveLabel.textAlignment = .right
-        waveLabel.numberOfLines = 2
+        waveLabel.numberOfLines = 3
         waveLabel.adjustsFontSizeToFitWidth = true
         waveLabel.minimumScaleFactor = 0.7
         waveLabel.text = "-- m\n-- s periode"
@@ -757,7 +760,12 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         map.addSubview(resetButton)
         
         addConstraints(isIPhoneX)
-        
+
+        // OWM legenda tonen als overlay al aan stond bij opstarten
+        if Preferences.shared.showOWMOverlay {
+            showOWMLegend(for: Preferences.shared.owmLayer)
+        }
+
         map.rotationGesture.delegate = self
         updateAppearance()
         
@@ -909,8 +917,9 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         NSLayoutConstraint(item: shareButton, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: 32).isActive = true
         NSLayoutConstraint(item: shareButton, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: 32).isActive = true
         
-        NSLayoutConstraint(item: aboutButton, attribute: .top, relatedBy: .equal, toItem: folderButton, attribute: .bottom, multiplier: 1, constant: 5).isActive = true
-        NSLayoutConstraint(item: aboutButton, attribute: .centerX, relatedBy: .equal, toItem: folderButton, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+        // aboutButton (i) — zelfde rij als folderButton, rechts van shareButton
+        NSLayoutConstraint(item: aboutButton, attribute: .centerY, relatedBy: .equal, toItem: folderButton, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: aboutButton, attribute: .leading, relatedBy: .equal, toItem: shareButton, attribute: .trailing, multiplier: 1, constant: 10).isActive = true
         NSLayoutConstraint(item: aboutButton, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: 32).isActive = true
         NSLayoutConstraint(item: aboutButton, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: 32).isActive = true
 
@@ -1620,7 +1629,7 @@ extension ViewController {
         let lon = locationManager.location?.coordinate.longitude ?? 4.5480
 
         // Open-Meteo: temp, zicht, druk (huidig + 3u trend)
-        let weatherURL = URL(string: "https://api.open-meteo.com/v1/forecast?latitude=\(lat)&longitude=\(lon)&current=temperature_2m,apparent_temperature,visibility,surface_pressure,cloud_cover&hourly=surface_pressure&past_hours=3&forecast_hours=1&timezone=Europe%2FAmsterdam")!
+        let weatherURL = URL(string: "https://api.open-meteo.com/v1/forecast?latitude=\(lat)&longitude=\(lon)&current=temperature_2m,apparent_temperature,visibility,surface_pressure,cloud_cover,precipitation&hourly=surface_pressure&past_hours=3&forecast_hours=1&timezone=Europe%2FAmsterdam")!
         URLSession.shared.dataTask(with: weatherURL) { [weak self] data, _, _ in
             guard let self = self, let data = data,
                   let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
@@ -1629,6 +1638,7 @@ extension ViewController {
             let feels  = cur["apparent_temperature"] as? Double ?? 0
             let vis    = (cur["visibility"] as? Double ?? 0) / 1000.0
             let press  = cur["surface_pressure"] as? Double ?? 0
+            let precip = cur["precipitation"] as? Double ?? 0
             // Luchtdruk trend uit hourly
             var trend = "→"
             if let hourly = json["hourly"] as? [String: Any],
@@ -1639,6 +1649,8 @@ extension ViewController {
             DispatchQueue.main.async {
                 self.tempVisLabel.text = "  \(String(format: "%.1f", temp))° / \(String(format: "%.1f", feels))°\n  \(String(format: "%.1f", vis)) km"
                 self.pressureLabel.text = "\(String(format: "%.0f", press)) hPa\n\(trend) \(trend == "▲" ? "stijgend" : trend == "▼" ? "dalend" : "stabiel")"
+                self.lastPrecipitationMmH = precip
+                self.updateWaveLabel()
             }
         }.resume()
 
@@ -1649,9 +1661,9 @@ extension ViewController {
                   let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
                   let cur = json["current"] as? [String: Any] else { return }
             let waveH = cur["wave_height"] as? Double ?? 0
-            let waveP = cur["wave_period"] as? Double ?? 0
             DispatchQueue.main.async {
-                self.waveLabel.text = "\(String(format: "%.1f", waveH))m\n\(String(format: "%.1f", waveP))s periode"
+                self.lastWaveHeightM = waveH
+                self.updateWaveLabel()
             }
         }.resume()
     }
@@ -1705,13 +1717,23 @@ extension ViewController {
         }.resume()
     }
 
+    /// Herberekent en toont waveLabel: golf, stroming, neerslag.
+    func updateWaveLabel() {
+        let stromingKn = lastWindSpeedKn * 0.02
+        let arrow = windArrow(degrees: lastWindDirDeg)
+        var lines: [String] = []
+        lines.append("\(String(format: "%.1f", lastWaveHeightM))m golf")
+        lines.append("\(arrow) \(String(format: "%.2f", stromingKn)) kn stroom")
+        if lastPrecipitationMmH > 0 {
+            lines.append("🌧 \(String(format: "%.1f", lastPrecipitationMmH)) mm/u")
+        }
+        waveLabel.text = lines.joined(separator: "\n")
+    }
+
     /// Berekent windgedreven stroming voor de Noord-Hollandse kust en toont in waveLabel.
     /// Kuststroming ≈ 2% van windsnelheid, richting ≈ windrichting.
     func updateStromingLabel() {
-        let stromingKn = lastWindSpeedKn * 0.02
-        let arrow = windArrow(degrees: lastWindDirDeg)
-        let waveText = waveLabel.text?.components(separatedBy: "\n").first ?? "--"
-        waveLabel.text = "\(waveText)\n\(arrow) \(String(format: "%.2f", stromingKn)) kn stroom"
+        updateWaveLabel()
     }
 
     /// Maakt NSAttributedString met "RNH GPX TRACKER" in geel en subtitle in wit.
@@ -1898,10 +1920,34 @@ extension ViewController: PreferencesTableViewControllerDelegate {
             map.showOWMOverlay = false   // reset zodat didSet altijd vuurt
             map.showOWMOverlay = true
             Toast.regular("OWM: \(layer.displayName) actief", position: .top)
+            showOWMLegend(for: layer)
         } else {
             map.showOWMOverlay = false
             Toast.regular("OWM kaartlaag uit", position: .top)
+            hideOWMLegend()
         }
+    }
+
+    /// Toont of vervangt de OWM kleurlegenda in de linker benedenhoek van de kaart.
+    func showOWMLegend(for layer: OWMLayer) {
+        if owmLegendView == nil {
+            let legend = OWMLegendView()
+            legend.translatesAutoresizingMaskIntoConstraints = false
+            map.addSubview(legend)
+            NSLayoutConstraint.activate([
+                legend.leadingAnchor.constraint(equalTo: folderButton.leadingAnchor),
+                legend.topAnchor.constraint(equalTo: folderButton.bottomAnchor, constant: 5),
+                legend.widthAnchor.constraint(greaterThanOrEqualToConstant: 80)
+            ])
+            owmLegendView = legend
+        }
+        owmLegendView?.configure(for: layer)
+        owmLegendView?.isHidden = false
+    }
+
+    /// Verbergt de OWM kleurlegenda.
+    func hideOWMLegend() {
+        owmLegendView?.isHidden = true
     }
 
     /// Pas GPS-accuraatheid en distanceFilter aan op basis van snelheid.

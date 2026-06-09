@@ -112,6 +112,20 @@ class WindAnnotationView: MKAnnotationView {
             x: center.x - bftSize.width / 2,
             y: center.y - bftSize.height / 2),
             withAttributes: attrs)
+
+        // Windsnelheid in knoten onder de cirkel
+        let knStr = String(format: "%.1f kn", wind.speedKn)
+        let knAttrs: [NSAttributedString.Key: Any] = [
+            .font: UIFont.boldSystemFont(ofSize: size * 0.13),
+            .foregroundColor: UIColor.white,
+            .strokeColor: UIColor.black,
+            .strokeWidth: -2.0
+        ]
+        let knSize = knStr.size(withAttributes: knAttrs)
+        knStr.draw(at: CGPoint(
+            x: center.x - knSize.width / 2,
+            y: center.y + circleR + 2),
+            withAttributes: knAttrs)
     }
 
     /// Update de pijl met nieuwe winddata en herteken.

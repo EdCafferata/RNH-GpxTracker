@@ -104,6 +104,7 @@
 		RHN001005RHN001005RHN005 /* WindAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = RHN001006RHN001006RHN006 /* WindAnnotation.swift */; };
 		RHN001007RHN001007RHN007 /* RadarTileOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = RHN001008RHN001008RHN008 /* RadarTileOverlay.swift */; };
 		RHN001009RHN001009RHN009 /* SatelliteTileOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = RHN001010RHN001010RHN010 /* SatelliteTileOverlay.swift */; };
+		RHN001011RHN001011RHN011 /* OWMLegendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = RHN001012RHN001012RHN012 /* OWMLegendView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -289,6 +290,7 @@
 		RHN001006RHN001006RHN006 /* WindAnnotation.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; includeInIndex = 1; path = WindAnnotation.swift; sourceTree = "<group>"; };
 		RHN001008RHN001008RHN008 /* RadarTileOverlay.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; includeInIndex = 1; path = RadarTileOverlay.swift; sourceTree = "<group>"; };
 		RHN001010RHN001010RHN010 /* SatelliteTileOverlay.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; includeInIndex = 1; path = SatelliteTileOverlay.swift; sourceTree = "<group>"; };
+		RHN001012RHN001012RHN012 /* OWMLegendView.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; includeInIndex = 1; path = OWMLegendView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -475,6 +477,7 @@
 				RHN001002RHN001002RHN002 /* OWMTileOverlay.swift */,
 				RHN001008RHN001008RHN008 /* RadarTileOverlay.swift */,
 				RHN001010RHN001010RHN010 /* SatelliteTileOverlay.swift */,
+				RHN001012RHN001012RHN012 /* OWMLegendView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -798,6 +801,7 @@
 				RHN001005RHN001005RHN005 /* WindAnnotation.swift in Sources */,
 				RHN001007RHN001007RHN007 /* RadarTileOverlay.swift in Sources */,
 				RHN001009RHN001009RHN009 /* SatelliteTileOverlay.swift in Sources */,
+				RHN001011RHN001011RHN011 /* OWMLegendView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

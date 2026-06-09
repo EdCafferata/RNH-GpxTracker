@@ -13,7 +13,7 @@ Registreert GPS-sporen op het water, slaat op als GPX, deelt via e-mail/AirDrop.
 - **Xcode project:** `OpenRHNTracker.xcodeproj`
 - **Bundle ID:** `info.cafferata.RnhGpxTracker`
 - **GitHub:** https://github.com/EdCafferata/RHN-GpxTracker — branch: `main`
-- **Versie:** `2.1.0` (in ontwikkeling, nog niet uitgebracht)
+- **Versie:** `2.2.0` (in ontwikkeling, nog niet uitgebracht op App Store)
 - **Live versie:** `2.0.0` — https://apps.apple.com/nl/app/rhn-tracker/id1598986930
 - **Ed's iPhone device ID:** `00008110-000E791A3AD9801E`
 - **Simulator ID:** `F6112483-4A4A-457E-8710-B0CAC169B941` (iPhone 16, iOS 18.6)
@@ -120,11 +120,18 @@ Strings in `OpenRHNTracker/<taal>.lproj/Localizable.strings`
 - [x] App Store screenshots iPhone + iPad
 - [x] App Store beschrijving NL + EN
 
-## Nieuw in v2.1.0 (in ontwikkeling, nog niet uitgebracht)
-- [x] **Snelheidsgebaseerde GPS-accuraatheid** — 4 profielen, tot 80% batterijbesparing — commit `d35bcf1`
-- [x] **'Telefoon op de lader' modus** — Settings → Tracking, altijd best GPS + 2m filter — commit `73415dc`
-- [x] About-scherm: BVK → Open RNH Tracker — commit `de114e2`
-- [x] README: live badge, correcte App Store URL — commit `1b3b6d4`
+## Nieuw in v2.2.0 (in ontwikkeling, nog niet uitgebracht)
+- [x] **Snelheidsgebaseerde GPS-accuraatheid** — 4 profielen, tot 80% batterijbesparing
+- [x] **'Telefoon op de lader' modus** — Settings → Tracking, altijd best GPS + 2m filter
+- [x] **OWM kaartlagen** — neerslag, bewolking, wind, druk, temperatuur als live overlay
+- [x] **OWM kleurlegenda** — kleine kleurschaal in kaarthoek bij actieve OWM overlay (`OWMLegendView.swift`)
+- [x] **Windpijl op kaart** — Beaufort-kleurcodering + snelheid in kn als tekst (`WindAnnotation.swift`)
+- [x] **Neerslag mm/uur** — live neerslag in infobalk via Open-Meteo (`precipitation`)
+- [x] **Toast fix** — iOS 13+ `connectedScenes` voor OWM-melding
+- [x] **Info-knop verplaatst** — zelfde rij als folder/prefs/share knoppen
+- [x] RNH typo gecorrigeerd (was RHN) in alle gebruikers-zichtbare teksten
+- [x] About-scherm: Frank toegevoegd als tester
 
 ## Open issues (backlog)
 - [ ] #3 ViewController.swift refactoren (1600+ regels)
+- [ ] #10 Screenshots bijwerken (haven IJmuiden + OpenSeaMap)
