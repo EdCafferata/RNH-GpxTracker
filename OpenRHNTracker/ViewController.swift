@@ -1897,8 +1897,10 @@ extension ViewController: PreferencesTableViewControllerDelegate {
         if newValue {
             map.showOWMOverlay = false   // reset zodat didSet altijd vuurt
             map.showOWMOverlay = true
+            Toast.regular("OWM: \(layer.displayName) actief")
         } else {
             map.showOWMOverlay = false
+            Toast.regular("OWM kaartlaag uit")
         }
     }
 
