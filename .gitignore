@@ -35,3 +35,11 @@ Carthage/Build
 
 .DS_Store
 tijdelijk/
+
+# Gevoelige bestanden (nooit committen)
+.env
+.env.*
+*.p8
+*.p12
+*.pem
+*.mobileprovision
