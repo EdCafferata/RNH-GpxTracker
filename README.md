@@ -1,6 +1,6 @@
 # RNH GPX Tracker 🚤
 
-🔒 Laatste security check: 2026-08-19 09:05 CEST
+🔒 Laatste security check: 2026-08-19 23:13 CEST
 
 [![Available on the App Store](https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg)](https://apps.apple.com/nl/app/rhn-tracker/id1598986930)
 ![Versie](https://img.shields.io/badge/versie-2.2.0-blue)
