@@ -452,7 +452,7 @@ extension InterfaceController: CLLocationManagerDelegate {
         speedLabel.setText(newLocation.speed.toSpeed(useImperial: preferences.useImperial))
         
         if gpxTrackingStatus == .tracking {
-            print("didUpdateLocation: adding point to track (\(newLocation.coordinate.latitude),\(newLocation.coordinate.longitude))")
+            print("didUpdateLocation: adding point to track")
             map.addPointToCurrentTrackSegmentAtLocation(newLocation)
             totalTrackedDistanceLabel.setText(map.totalTrackedDistance.toDistance(useImperial: preferences.useImperial))
         }
