@@ -26,10 +26,11 @@ jobs:
           languages: swift
           build-mode: manual
       # Autobuild bouwt met -target en vindt dan de Swift-packages (CoreGPX) niet; bouw via het scheme.
+      # Device-build (ongesigneerd): het scheme bevat een Watch-app en die kan niet voor de iOS-simulator.
       - name: Build
         run: |
           xcodebuild build -project OpenRHNTracker.xcodeproj -scheme OpenRHNTracker \
-            -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' \
+            -destination 'generic/platform=iOS' \
             CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO
       - uses: github/codeql-action/analyze@v4
         with:
