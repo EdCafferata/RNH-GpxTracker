@@ -422,7 +422,7 @@ extension InterfaceController: CLLocationManagerDelegate {
         
         let hAcc = newLocation.horizontalAccuracy
         let vAcc = newLocation.verticalAccuracy
-        print("didUpdateLocation: received \(newLocation.coordinate) hAcc: \(hAcc) vAcc: \(vAcc) floor: \(newLocation.floor?.description ?? "''")")
+        print("didUpdateLocation: received location hAcc: \(hAcc) vAcc: \(vAcc) floor: \(newLocation.floor?.description ?? "''")")
 
         signalAccuracyLabel.setText(hAcc.toAccuracy(useImperial: preferences.useImperial))
         if hAcc < kSignalAccuracy6 {

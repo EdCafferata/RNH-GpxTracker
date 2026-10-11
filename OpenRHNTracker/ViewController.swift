@@ -2126,7 +2126,7 @@ extension ViewController: CLLocationManagerDelegate {
             let interval = Preferences.shared.trackIntervalSeconds
             if lastTrackedDate == nil || now.timeIntervalSince(lastTrackedDate!) >= interval {
                 lastTrackedDate = now
-                print("didUpdateLocation: adding point to track (\(newLocation.coordinate.latitude),\(newLocation.coordinate.longitude))")
+                print("didUpdateLocation: adding point to track")
                 map.addPointToCurrentTrackSegmentAtLocation(newLocation)
                 totalTrackedDistanceLabel.distance = map.session.totalTrackedDistance
                 currentSegmentDistanceLabel.distance = map.session.currentSegmentDistance
