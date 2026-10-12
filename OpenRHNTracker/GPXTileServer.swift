@@ -50,11 +50,11 @@ enum GPXTileServer: Int {
         case .apple: return "Apple Mapkit (no offline cache)"
         case .appleSatellite: return "Apple Satellite (no offline cache)"
         case .openStreetMap: return "OpenStreetMap"
-        case .cartoDB: return "Carto DB"
-        case .cartoDBRetina: return "Carto DB (Retina resolution)"
+        case .cartoDB: return "Wegenkaart (Esri)"
+        case .cartoDBRetina: return "Licht grijs (Esri)"
         case .openTopoMap: return "OpenTopoMap"
         case .openSeaMap: return "OpenSeaMap"
-        case .cartoDBDark: return "Carto DB Dark Matter"
+        case .cartoDBDark: return "Donker grijs (Esri)"
         }
     }
     
@@ -64,11 +64,14 @@ enum GPXTileServer: Int {
         case .apple: return ""
         case .appleSatellite: return ""
         case .openStreetMap: return "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        case .cartoDB: return "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png"
-        case .cartoDBRetina: return "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png"
+        // Okt 2026: Carto heeft z'n gratis keyless basemaps afgeknepen ("API KEY REQUIRED").
+        // Vervangen door Esri keyless basemaps (geen account/key nodig). Let op: Esri gebruikt
+        // {z}/{y}/{x} (y vóór x) en géén subdomeinen. MapCache vervangt de tokens los van volgorde.
+        case .cartoDB: return "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}"
+        case .cartoDBRetina: return "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
         case .openTopoMap: return "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png"
         case .openSeaMap: return "https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png"
-        case .cartoDBDark: return "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png"
+        case .cartoDBDark: return "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}"
         }
     }
     
@@ -84,10 +87,10 @@ enum GPXTileServer: Int {
         case .apple: return []
         case .appleSatellite: return []
         case .openStreetMap: return ["a", "b", "c"]
-        case .cartoDB, .cartoDBRetina: return ["a", "b", "c"]
+        case .cartoDB, .cartoDBRetina: return []
         case .openTopoMap: return ["a", "b", "c"]
         case .openSeaMap: return []
-        case .cartoDBDark: return ["a", "b", "c"]
+        case .cartoDBDark: return []
         // case .AnotherMap: return ["a","b"]
         }
     }
@@ -110,15 +113,17 @@ enum GPXTileServer: Int {
             return -1
         case .openStreetMap:
             return 19
-        case .cartoDB, .cartoDBRetina:
-            return 21
+        case .cartoDB:
+            return 19
+        case .cartoDBRetina:
+            return 16
         case .openTopoMap:
             return 17
         // case .AnotherMap: return 10
         case .openSeaMap:
             return 18
         case .cartoDBDark:
-            return 21
+            return 16
         }
     }
     ///
@@ -164,7 +169,6 @@ enum GPXTileServer: Int {
     /// 2x/retina tiles are 512x512
     var tileSize: Int {
         switch self {
-        case .cartoDBRetina: return 512
         default: return 256
         }
     }
