@@ -489,6 +489,16 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         map.frame = CGRect(x: 0.0, y: (isIPhoneX ? 0.0 : 20.0), width: self.view.bounds.size.width, height: mapH)
         map.isZoomEnabled = true
         map.isRotateEnabled = true
+        // Begrens hoe ver je mag inzoomen (~40m-schaal), voor álle kaartlagen gelijk.
+        // Zo kom je nooit voorbij het punt waar nog bruikbaar kaartbeeld is.
+        // minCenterCoordinateDistance is in meters (camera→centrum); gekalibreerd op toestel
+        // (150 ≈ ~10 m, 300 ≈ ~20 m, 600 ≈ ~40 m; schaal is lineair met de afstand).
+        if #available(iOS 13.0, *) {
+            map.setCameraZoomRange(
+                MKMapView.CameraZoomRange(minCenterCoordinateDistance: 600),
+                animated: false
+            )
+        }
         // Set the position of the compass.
         map.compassRect = CGRect(x: map.frame.width/2 - 18, y: isIPhoneX ? 105.0 : 70.0, width: 36, height: 36)
         

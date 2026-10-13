@@ -99,6 +99,15 @@ class GPXMapView: MKMapView {
                 // we need to keep a reference to remove it, in case we return back to Apple Maps.
                 //
                 tileServerOverlay = useCache(cache, canReplaceMapContent: newValue.canReplaceMapContent)
+                // MapCache 0.10.0's useCache() zet altijd overlay.maximumZ — ook als we
+                // overzoom willen (overZoomMaximumZ staat default aan). Daardoor stopt MapKit
+                // met tekenen vóórbij maximumZ en komt de overzoom-renderer nooit aan de beurt:
+                // leeg beeld zodra je inzoomt op een laag met lage max. Cap op de overlay
+                // weghalen (-1, zoals SatelliteTileOverlay) → MapKit blijft draw() aanroepen en
+                // CachedTileOverlayRenderer vergroot de laatste echte tegel (config.maximumZ) uit.
+                if newValue.maximumZ > 0 {
+                    tileServerOverlay.maximumZ = -1
+                }
             } else {
                 self.mapType = (newValue == .apple) ? .standard : .satellite
             }
