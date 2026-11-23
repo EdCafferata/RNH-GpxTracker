@@ -174,3 +174,9 @@
 "LOCATION" = "Location";
 "LOCATION_TIME" = "Location's Time";
 
+/* Opslaan: fout en bestaande naam */
+"SAVE_FAILED_TITLE" = "Save failed";
+"SAVE_FAILED_MESSAGE" = "The track could not be saved. Nothing was deleted: try again, perhaps with a different name, or free up space on your phone.";
+"FILE_EXISTS_TITLE" = "Name already exists";
+"FILE_EXISTS_MESSAGE" = "A track named \"%@\" already exists. Do you want to replace it?";
+"REPLACE" = "Replace";

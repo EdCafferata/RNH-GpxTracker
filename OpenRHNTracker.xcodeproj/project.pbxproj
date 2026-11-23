@@ -57,6 +57,7 @@
 		89F6E107227F7C5500CE3E3F /* Double+Measures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F6E0F4227D091900CE3E3F /* Double+Measures.swift */; };
 		89F8749B1BBB7362004EF41A /* GPXTrack+length.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F8749A1BBB7362004EF41A /* GPXTrack+length.swift */; };
 		89F8749F1BBCB97F004EF41A /* GPXRoot+length.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F8749E1BBCB97F004EF41A /* GPXRoot+length.swift */; };
+		9E33F2FC8F35178791871D66 /* WeatherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5342D91D3C5F44318B69D560 /* WeatherService.swift */; };
 		BF15092223916FC100F51F1B /* UIColor+DarkMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF15092123916FC100F51F1B /* UIColor+DarkMode.swift */; };
 		BF177EEA24D54F9200D5E021 /* CoreDataHelper+BatchDelete.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF177EE924D54F9200D5E021 /* CoreDataHelper+BatchDelete.swift */; };
 		BF1FE1A8230EAB9B00404B59 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BF1FE1A6230EAB9B00404B59 /* Localizable.strings */; };
@@ -186,6 +187,7 @@
 		45A430EA230D61240003C2F2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
 		45A430ED230D612B0003C2F2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Interface.strings; sourceTree = "<group>"; };
 		45A430EF230D612C0003C2F2 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Interface.strings; sourceTree = "<group>"; };
+		5342D91D3C5F44318B69D560 /* WeatherService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WeatherService.swift; sourceTree = "<group>"; };
 		836B1BAC2E7DC69900285130 /* ViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerTests.swift; sourceTree = "<group>"; };
 		836B1BAE2E7DC7D500285130 /* MapCache.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MapCache.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		836B1BB22E7DC7E900285130 /* CoreGPX.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CoreGPX.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -459,6 +461,7 @@
 				DC4908A21C4A332E009484AE /* MapViewDelegate.swift */,
 				BF9AE57B2410011D00B103A0 /* DefaultNameSetupViewController.swift */,
 				RHN001004RHN001004RHN004 /* OWMRegistrationViewController.swift */,
+				5342D91D3C5F44318B69D560 /* WeatherService.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -802,6 +805,7 @@
 				RHN001007RHN001007RHN007 /* RadarTileOverlay.swift in Sources */,
 				RHN001009RHN001009RHN009 /* SatelliteTileOverlay.swift in Sources */,
 				RHN001011RHN001011RHN011 /* OWMLegendView.swift in Sources */,
+				9E33F2FC8F35178791871D66 /* WeatherService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1142,7 +1146,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "info.cafferata.RnhGpxTracker.tests";
+				PRODUCT_BUNDLE_IDENTIFIER = info.cafferata.RnhGpxTracker.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OpenRHNTracker.app/OpenRHNTracker";
@@ -1164,7 +1168,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "info.cafferata.RnhGpxTracker.tests";
+				PRODUCT_BUNDLE_IDENTIFIER = info.cafferata.RnhGpxTracker.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OpenRHNTracker.app/OpenRHNTracker";
@@ -1219,12 +1223,12 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 9J2S23WJH3;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				"EXCLUDED_ARCHS[sdk=watchsimulator*]" = "arm64 arm64e x86_64";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				IBSC_MODULE = OpenRHNTracker_Watch_Extension;
 				INFOPLIST_FILE = "OpenRHNTracker-Watch/Info.plist";
 				MARKETING_VERSION = 2.2.1;
 				MTL_FAST_MATH = YES;
-				"EXCLUDED_ARCHS[sdk=watchsimulator*]" = "arm64 arm64e x86_64";
 				PRODUCT_BUNDLE_IDENTIFIER = info.cafferata.RnhGpxTracker.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -1285,6 +1289,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 9J2S23WJH3;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				"EXCLUDED_ARCHS[sdk=watchsimulator*]" = "arm64 arm64e x86_64";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = "OpenRHNTracker-Watch Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1296,7 +1301,6 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = info.cafferata.RnhGpxTracker.watchkitapp.ext;
 				PRODUCT_NAME = "${TARGET_NAME}";
-				"EXCLUDED_ARCHS[sdk=watchsimulator*]" = "arm64 arm64e x86_64";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;

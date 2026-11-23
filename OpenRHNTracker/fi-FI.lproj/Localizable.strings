@@ -117,3 +117,10 @@ Created by Phiilman on 28.03.20.
 
 "CONTINUE_SESSION" = "Jatka tapahtumaa";
 "SAVE_START_NEW" = "Tallenna ja aloita uusi tapahtuma";
+
+/* Opslaan: fout en bestaande naam */
+"SAVE_FAILED_TITLE" = "Tallennus epäonnistui";
+"SAVE_FAILED_MESSAGE" = "Reittiä ei voitu tallentaa. Mitään ei poistettu: yritä uudelleen, ehkä eri nimellä, tai vapauta tilaa puhelimesta.";
+"FILE_EXISTS_TITLE" = "Nimi on jo olemassa";
+"FILE_EXISTS_MESSAGE" = "Reitti nimeltä \"%@\" on jo olemassa. Haluatko korvata sen?";
+"REPLACE" = "Korvaa";

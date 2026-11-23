@@ -409,8 +409,11 @@ class CoreDataHelper {
         let recoveredFileName = "recovery-\(fileName)"
         let gpxString = gpx.gpx()
         
-        // Save the recovered file.
-        GPXFileManager.save(recoveredFileName, gpxContents: gpxString)
+        // Save the recovered file. Lukt dat niet, dan de herstelkopie bewaren voor een volgende poging.
+        guard GPXFileManager.save(recoveredFileName, gpxContents: gpxString) else {
+            print("Recovery: opslaan van \(recoveredFileName) mislukt; herstelkopie blijft bewaard")
+            return
+        }
         print("File \(recoveredFileName) was recovered from previous session, prior to unexpected crash/exit")
         
         // clear aft save.

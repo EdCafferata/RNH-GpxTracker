@@ -164,3 +164,9 @@
 "LOCATION" = "Localização";
 "LOCATION_TIME" = "Hora da localização";
 
+/* Opslaan: fout en bestaande naam */
+"SAVE_FAILED_TITLE" = "Falha ao salvar";
+"SAVE_FAILED_MESSAGE" = "Não foi possível salvar o percurso. Nada foi apagado: tente novamente, talvez com outro nome, ou libere espaço no celular.";
+"FILE_EXISTS_TITLE" = "O nome já existe";
+"FILE_EXISTS_MESSAGE" = "Já existe um percurso chamado \"%@\". Deseja substituí-lo?";
+"REPLACE" = "Substituir";

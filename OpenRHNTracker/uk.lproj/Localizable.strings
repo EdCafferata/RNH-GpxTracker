@@ -133,3 +133,10 @@
 "DEFAULT_NAME_SAMPLE_OUTPUT_TITLE" = "Sample: ";
 "DEFAULT_NAME_USE_UTC" = "Use UTC Time?";
 "DEFAULT_NAME_ENGLISH_LOCALE" = "Force English language based date formatting?";
+
+/* Opslaan: fout en bestaande naam */
+"SAVE_FAILED_TITLE" = "Не вдалося зберегти";
+"SAVE_FAILED_MESSAGE" = "Маршрут не вдалося зберегти. Нічого не видалено: спробуйте ще раз, можливо з іншою назвою, або звільніть місце на телефоні.";
+"FILE_EXISTS_TITLE" = "Назва вже існує";
+"FILE_EXISTS_MESSAGE" = "Маршрут із назвою «%@» уже існує. Замінити його?";
+"REPLACE" = "Замінити";

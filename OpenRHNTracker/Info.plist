@@ -49,11 +49,6 @@
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-	</dict>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Location is only used to display your position in the map. Select always allow to track your position even if the app is in background.</string>
 	<key>NSLocationAlwaysUsageDescription</key>

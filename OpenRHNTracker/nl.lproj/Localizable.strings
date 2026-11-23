@@ -173,3 +173,10 @@
 "GMT_FULL" = "GMT volledig";
 "LOCATION" = "Locatie";
 "LOCATION_TIME" = "Locatietijd";
+
+/* Opslaan: fout en bestaande naam */
+"SAVE_FAILED_TITLE" = "Opslaan mislukt";
+"SAVE_FAILED_MESSAGE" = "De route kon niet worden opgeslagen. Er is niets gewist: probeer het opnieuw, eventueel met een andere naam, of maak ruimte vrij op je telefoon.";
+"FILE_EXISTS_TITLE" = "Naam bestaat al";
+"FILE_EXISTS_MESSAGE" = "Er is al een route met de naam \"%@\". Wil je die vervangen?";
+"REPLACE" = "Vervangen";

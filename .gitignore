@@ -43,3 +43,4 @@ tijdelijk/
 *.p12
 *.pem
 *.mobileprovision
+fastlane/report.xml

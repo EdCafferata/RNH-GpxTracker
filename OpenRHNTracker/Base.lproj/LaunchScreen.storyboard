@@ -1,55 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
-    <device id="retina6_5" orientation="portrait" appearance="light"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Opstartscherm: logo op donkerblauw, naam eronder-->
         <scene sceneID="EHf-IW-A2E">
             <objects>
                 <viewController id="01J-lp-oVM" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="F7k-3Z-aRn"/>
-                        <viewControllerLayoutGuide type="bottom" id="XxK-Sx-dxe"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" insetsLayoutMarginsFromSafeArea="NO" text="  Copyright (c) Juan M. Merlos" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7SI-wk-ECK">
-                                <rect key="frame" x="20" y="821" width="374" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.35999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="LaunchLogo" translatesAutoresizingMaskIntoConstraints="NO" id="RNH-lg-001">
+                                <rect key="frame" x="96.666666666666671" y="296" width="200" height="200"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="RNH-lg-w01"/>
+                                    <constraint firstAttribute="height" constant="200" id="RNH-lg-h01"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="RNH Tracker" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RNH-tt-001">
+                                <rect key="frame" x="20" y="524" width="353" height="34"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="28"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" insetsLayoutMarginsFromSafeArea="NO" text="OPEN GPX TRACKER" textAlignment="center" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="GJd-Yh-RWb">
-                                <rect key="frame" x="20" y="299" width="374" height="43"/>
-                                <color key="backgroundColor" red="0.33333334329999997" green="0.33333334329999997" blue="0.33333334329999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="43" id="eZr-kB-Rkx"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="32"/>
-                                <color key="textColor" red="0.99942404029999998" green="0.98555368190000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Ronde om Noord-Holland" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RNH-st-001">
+                                <rect key="frame" x="20" y="564" width="353" height="20"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <color key="textColor" white="1" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <viewLayoutGuide key="safeArea" id="RNH-sa-001"/>
+                        <color key="backgroundColor" red="0.043137254901960784" green="0.12156862745098039" blue="0.29411764705882354" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="GJd-Yh-RWb" firstAttribute="trailing" secondItem="7SI-wk-ECK" secondAttribute="trailing" id="IWp-sD-PX9"/>
-                            <constraint firstItem="GJd-Yh-RWb" firstAttribute="leading" secondItem="7SI-wk-ECK" secondAttribute="leading" id="SxX-OG-aty"/>
-                            <constraint firstItem="GJd-Yh-RWb" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" id="Ylr-4B-ChJ"/>
-                            <constraint firstItem="XxK-Sx-dxe" firstAttribute="top" secondItem="7SI-wk-ECK" secondAttribute="bottom" constant="20" id="bTx-rs-ihV"/>
-                            <constraint firstItem="GJd-Yh-RWb" firstAttribute="top" secondItem="F7k-3Z-aRn" secondAttribute="bottom" constant="255" id="m6g-g5-DtJ"/>
-                            <constraint firstItem="GJd-Yh-RWb" firstAttribute="trailing" secondItem="Ze5-6b-2t3" secondAttribute="trailingMargin" id="o5n-e7-tt6"/>
+                            <constraint firstItem="RNH-lg-001" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="RNH-c-001"/>
+                            <constraint firstItem="RNH-lg-001" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" constant="-30" id="RNH-c-002"/>
+                            <constraint firstItem="RNH-tt-001" firstAttribute="top" secondItem="RNH-lg-001" secondAttribute="bottom" constant="28" id="RNH-c-003"/>
+                            <constraint firstItem="RNH-tt-001" firstAttribute="leading" secondItem="RNH-sa-001" secondAttribute="leading" constant="20" id="RNH-c-004"/>
+                            <constraint firstItem="RNH-sa-001" firstAttribute="trailing" secondItem="RNH-tt-001" secondAttribute="trailing" constant="20" id="RNH-c-005"/>
+                            <constraint firstItem="RNH-st-001" firstAttribute="top" secondItem="RNH-tt-001" secondAttribute="bottom" constant="6" id="RNH-c-006"/>
+                            <constraint firstItem="RNH-st-001" firstAttribute="leading" secondItem="RNH-tt-001" secondAttribute="leading" id="RNH-c-007"/>
+                            <constraint firstItem="RNH-st-001" firstAttribute="trailing" secondItem="RNH-tt-001" secondAttribute="trailing" id="RNH-c-008"/>
                         </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="50.724637681159422" y="374.33035714285711"/>
+            <point key="canvasLocation" x="50" y="374"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="LaunchLogo" width="200" height="200"/>
+    </resources>
 </document>

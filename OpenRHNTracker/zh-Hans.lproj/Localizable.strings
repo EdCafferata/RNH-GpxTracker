@@ -164,3 +164,10 @@
 "GMT_FULL" = "GMT 整体";
 "LOCATION" = "地点";
 "LOCATION_TIME" = "地点时区";
+
+/* Opslaan: fout en bestaande naam */
+"SAVE_FAILED_TITLE" = "保存失败";
+"SAVE_FAILED_MESSAGE" = "无法保存轨迹。没有删除任何内容：请重试，可以换个名称，或释放手机空间。";
+"FILE_EXISTS_TITLE" = "名称已存在";
+"FILE_EXISTS_MESSAGE" = "已存在名为“%@”的轨迹。要替换它吗？";
+"REPLACE" = "替换";

@@ -211,15 +211,14 @@ extension AppDelegate: WCSessionDelegate {
     /// Called when a file is received from Apple Watch.
     /// Displays a popup informing about the reception of the file.
     func session(_ session: WCSession, didReceive file: WCSessionFile) {
-        // swiftlint:disable:next force_cast
-        let fileName = file.metadata!["fileName"] as! String?
-        DispatchQueue.global().sync {
-            GPXFileManager.moveFrom(file.fileURL, fileName: fileName)
-            print("ViewController:: Received file from WatchConnectivity Session")
+        // Het tijdelijke bestand verdwijnt zodra deze methode terugkeert, dus synchroon verplaatsen.
+        let fileName = file.metadata?["fileName"] as? String
+        guard let savedName = GPXFileManager.moveFrom(file.fileURL, fileName: fileName) else {
+            print("AppDelegate:: bestand van de Watch kon niet worden opgeslagen (\(fileName ?? "geen naam"))")
+            return
         }
-        
-        // posts notification that file is received from apple watch
-        NotificationCenter.default.post(name: .didReceiveFileFromAppleWatch, object: nil, userInfo: ["fileName": fileName ?? ""])
+        // Alleen melden als het bestand er echt staat.
+        NotificationCenter.default.post(name: .didReceiveFileFromAppleWatch, object: nil, userInfo: ["fileName": savedName])
     }
 }
 

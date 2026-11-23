@@ -163,3 +163,9 @@
 "LOCATION" = "Localisation";
 "LOCATION_TIME" = "Heure locale";
 
+/* Opslaan: fout en bestaande naam */
+"SAVE_FAILED_TITLE" = "Échec de l'enregistrement";
+"SAVE_FAILED_MESSAGE" = "Le parcours n'a pas pu être enregistré. Rien n'a été supprimé : réessayez, éventuellement avec un autre nom, ou libérez de l'espace sur votre téléphone.";
+"FILE_EXISTS_TITLE" = "Le nom existe déjà";
+"FILE_EXISTS_MESSAGE" = "Un parcours nommé « %@ » existe déjà. Voulez-vous le remplacer ?";
+"REPLACE" = "Remplacer";

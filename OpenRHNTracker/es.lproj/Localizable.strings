@@ -161,3 +161,10 @@
 "GMT_FULL" = "GMT completo";
 "LOCATION" = "Ubicación";
 "LOCATION_TIME" = "Hora en la ubicación";
+
+/* Opslaan: fout en bestaande naam */
+"SAVE_FAILED_TITLE" = "Error al guardar";
+"SAVE_FAILED_MESSAGE" = "No se pudo guardar el recorrido. No se ha borrado nada: inténtalo de nuevo, quizá con otro nombre, o libera espacio en el teléfono.";
+"FILE_EXISTS_TITLE" = "El nombre ya existe";
+"FILE_EXISTS_MESSAGE" = "Ya existe un recorrido llamado \"%@\". ¿Quieres reemplazarlo?";
+"REPLACE" = "Reemplazar";

@@ -130,3 +130,10 @@
 "DEFAULT_NAME_SAMPLE_OUTPUT_TITLE" = "Sample: ";
 "DEFAULT_NAME_USE_UTC" = "Use UTC Time?";
 "DEFAULT_NAME_ENGLISH_LOCALE" = "Force English language based date formatting?";
+
+/* Opslaan: fout en bestaande naam */
+"SAVE_FAILED_TITLE" = "Speichern fehlgeschlagen";
+"SAVE_FAILED_MESSAGE" = "Die Route konnte nicht gespeichert werden. Es wurde nichts gelöscht: Versuche es erneut, eventuell mit einem anderen Namen, oder schaffe Speicherplatz.";
+"FILE_EXISTS_TITLE" = "Name existiert bereits";
+"FILE_EXISTS_MESSAGE" = "Es gibt bereits eine Route namens \"%@\". Möchtest du sie ersetzen?";
+"REPLACE" = "Ersetzen";

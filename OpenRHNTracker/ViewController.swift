@@ -317,10 +317,8 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     var waterstandTimer: Timer?
 
     /// Laatste windsnelheid (knoten) en richting (graden) voor stroming berekening
-    var lastWindSpeedKn: Double = 0
-    var lastWindDirDeg: Double = 0
     var lastPrecipitationMmH: Double = 0
-    var lastWaveHeightM: Double = 0
+    var lastWaveHeightM: Double?
     var owmLegendView: OWMLegendView?
 
 
@@ -1224,7 +1222,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
             // Create a temporary file
             let filename =  self.lastGpxFilename.isEmpty ? self.defaultFilename() : self.lastGpxFilename
             let gpxString: String = self.map.exportToGPXString()
-            let tmpFile = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("\(filename).gpx")
+            let tmpFile = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("\(GPXFileManager.sanitizedFilename(filename)).gpx")
             GPXFileManager.saveToURL(tmpFile, gpxContents: gpxString)
             // Add it to the list of tmpFiles.
             // Note: it may add more than once the same file to the list.
@@ -1398,17 +1396,14 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         })
         
         let saveAction = UIAlertAction(title: NSLocalizedString("SAVE", comment: "no comment"), style: .default) { _ in
-            let filename = (alertController.textFields?[0].text!.utf16.count == 0) ? self.defaultFilename() : alertController.textFields?[0].text
-            print("Save File \(String(describing: filename))")
-            // Export to a file
-            let gpxString = self.map.exportToGPXString()
-            GPXFileManager.save(filename!, gpxContents: gpxString)
-            self.lastGpxFilename = filename!
-            self.map.coreDataHelper.coreDataDeleteAll(of: CDRoot.self)
-            self.map.coreDataHelper.clearAllExceptWaypoints()
-            self.map.coreDataHelper.add(toCoreData: filename!, willContinueAfterSave: true)
-            if withReset {
-                self.gpxTrackingStatus = .notStarted
+            let typed = alertController.textFields?.first?.text ?? ""
+            let filename = GPXFileManager.sanitizedFilename(typed.isEmpty ? self.defaultFilename() : typed)
+            // Bestaat er al een ándere route met deze naam? Eerst vragen, nooit stil overschrijven.
+            // (Dezelfde sessie opnieuw opslaan onder haar eigen naam is wel gewoon bijwerken.)
+            if filename != self.lastGpxFilename && GPXFileManager.fileExists(filename) {
+                self.confirmReplace(filename: filename) { self.performSave(filename: filename, withReset: withReset) }
+            } else {
+                self.performSave(filename: filename, withReset: withReset)
             }
         }
         let cancelAction = UIAlertAction(title: NSLocalizedString("CANCEL", comment: "no comment"), style: .cancel) { _ in }
@@ -1420,6 +1415,37 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         
     }
     
+    /// Schrijft de sessie weg. Alleen als dat gelukt is wordt de herstelkopie gewist en
+    /// (bij "Opslaan & nieuw") de sessie gereset; anders blijft alles staan en krijgt de gebruiker een melding.
+    func performSave(filename: String, withReset: Bool) {
+        let gpxString = self.map.exportToGPXString()
+        guard GPXFileManager.save(filename, gpxContents: gpxString) else {
+            let alert = UIAlertController(title: NSLocalizedString("SAVE_FAILED_TITLE", comment: "no comment"),
+                                          message: NSLocalizedString("SAVE_FAILED_MESSAGE", comment: "no comment"),
+                                          preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            present(alert, animated: true)
+            return
+        }
+        self.lastGpxFilename = filename
+        self.map.coreDataHelper.coreDataDeleteAll(of: CDRoot.self)
+        self.map.coreDataHelper.clearAllExceptWaypoints()
+        self.map.coreDataHelper.add(toCoreData: filename, willContinueAfterSave: true)
+        if withReset {
+            self.gpxTrackingStatus = .notStarted
+        }
+    }
+
+    /// Vraagt of een bestaande route met dezelfde naam vervangen mag worden.
+    func confirmReplace(filename: String, onReplace: @escaping () -> Void) {
+        let alert = UIAlertController(title: NSLocalizedString("FILE_EXISTS_TITLE", comment: "no comment"),
+                                      message: String(format: NSLocalizedString("FILE_EXISTS_MESSAGE", comment: "no comment"), filename),
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("REPLACE", comment: "no comment"), style: .destructive) { _ in onReplace() })
+        alert.addAction(UIAlertAction(title: NSLocalizedString("CANCEL", comment: "no comment"), style: .cancel))
+        present(alert, animated: true)
+    }
+
     ///
     /// There was a memory warning. Right now, it does nothing but to log a line.
     ///
@@ -1593,103 +1619,22 @@ extension ViewController {
         waterstandTimer = nil
     }
 
-    /// Haalt actuele waterstand op via Rijkswaterstaat DDAPI.
-    /// Meetpunt: IJmuiden (start/finish RNH, Noord-Hollandse kust).
+    /// Waterstand IJmuiden (start/finish RNH) in de infobalk.
     func fetchWaterstand() {
-        let now = Date()
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-        let begin = formatter.string(from: now.addingTimeInterval(-1800)) // 30 min geleden
-        let end   = formatter.string(from: now)
-
-        let url = URL(string: "https://ddapi20-waterwebservices.rijkswaterstaat.nl/ONLINEWAARNEMINGENSERVICES/OphalenWaarnemingen")!
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("RNHTracker", forHTTPHeaderField: "X-API-KEY")
-        let body: [String: Any] = [
-            "Locatie": ["Code": "ijmuiden"],
-            "AquoPlusWaarnemingMetadata": ["AquoMetadata": [
-                "Compartiment": ["Code": "OW"],
-                "Grootheid":    ["Code": "WATHTE"]
-            ]],
-            "Periode": ["Begindatumtijd": begin, "Einddatumtijd": end]
-        ]
-        request.httpBody = try? JSONSerialization.data(withJSONObject: body)
-
-        URLSession.shared.dataTask(with: request) { [weak self] data, _, error in
-            guard let self = self, let data = data, error == nil else { return }
-            guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-                  let lijst = json["WaarnemingenLijst"] as? [[String: Any]],
-                  let metingen = lijst.first?["MetingenLijst"] as? [[String: Any]],
-                  let laatste = metingen.last,
-                  let meetwaarde = laatste["Meetwaarde"] as? [String: Any],
-                  let waarde = meetwaarde["Waarde_Numeriek"] as? Double else { return }
-            let nap = String(format: "%+.0f", waarde)
-            DispatchQueue.main.async {
-                self.waterInfoLabel.text = "IJmuiden\n\(nap) cm NAP"
-            }
-        }.resume()
+        WeatherService.haalWaterstandIJmuiden { [weak self] cm in
+            guard let self = self, let cm = cm else { return }
+            self.waterInfoLabel.text = "IJmuiden\n\(String(format: "%+.0f", cm)) cm NAP"
+        }
     }
 
-    // MARK: - Weer extra (temp, druk, zicht, golven)
+    // MARK: - Weer, wind en golven (Open-Meteo)
 
-    func fetchExtraWeatherData() {
-        let lat = locationManager.location?.coordinate.latitude ?? 52.4630
-        let lon = locationManager.location?.coordinate.longitude ?? 4.5480
-
-        // Open-Meteo: temp, zicht, druk (huidig + 3u trend)
-        let weatherURL = URL(string: "https://api.open-meteo.com/v1/forecast?latitude=\(lat)&longitude=\(lon)&current=temperature_2m,apparent_temperature,visibility,surface_pressure,cloud_cover,precipitation&hourly=surface_pressure&past_hours=3&forecast_hours=1&timezone=Europe%2FAmsterdam")!
-        URLSession.shared.dataTask(with: weatherURL) { [weak self] data, _, _ in
-            guard let self = self, let data = data,
-                  let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-                  let cur = json["current"] as? [String: Any] else { return }
-            let temp   = cur["temperature_2m"] as? Double ?? 0
-            let feels  = cur["apparent_temperature"] as? Double ?? 0
-            let vis    = (cur["visibility"] as? Double ?? 0) / 1000.0
-            let press  = cur["surface_pressure"] as? Double ?? 0
-            let precip = cur["precipitation"] as? Double ?? 0
-            // Luchtdruk trend uit hourly
-            var trend = "→"
-            if let hourly = json["hourly"] as? [String: Any],
-               let pressures = hourly["surface_pressure"] as? [Double], pressures.count >= 3 {
-                let diff = pressures.last! - pressures.first!
-                trend = diff > 0.5 ? "▲" : diff < -0.5 ? "▼" : "→"
-            }
-            DispatchQueue.main.async {
-                self.tempVisLabel.text = "  \(String(format: "%.1f", temp))° / \(String(format: "%.1f", feels))°\n  \(String(format: "%.1f", vis)) km"
-                self.pressureLabel.text = "\(String(format: "%.0f", press)) hPa\n\(trend) \(trend == "▲" ? "stijgend" : trend == "▼" ? "dalend" : "stabiel")"
-                self.lastPrecipitationMmH = precip
-                self.updateWaveLabel()
-            }
-        }.resume()
-
-        // Open-Meteo Marine: golfhoogte + periode
-        let marineURL = URL(string: "https://marine-api.open-meteo.com/v1/marine?latitude=\(lat)&longitude=\(lon)&current=wave_height,wave_period&timezone=Europe%2FAmsterdam")!
-        URLSession.shared.dataTask(with: marineURL) { [weak self] data, _, _ in
-            guard let self = self, let data = data,
-                  let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-                  let cur = json["current"] as? [String: Any] else { return }
-            let waveH = cur["wave_height"] as? Double ?? 0
-            DispatchQueue.main.async {
-                self.lastWaveHeightM = waveH
-                self.updateWaveLabel()
-            }
-        }.resume()
-    }
-
-    // MARK: - Radar (Rainviewer)
-
-    // MARK: - Wind (Open-Meteo)
-
-    /// Start wind update timer — haalt elke 5 minuten verse winddata op.
+    /// Start weer-timer — haalt elke 5 minuten verse gegevens op.
     func startWindTimer() {
-        fetchWindData()
-        fetchExtraWeatherData()
+        fetchWeather()
         windUpdateTimer?.invalidate()
         windUpdateTimer = Timer.scheduledTimer(withTimeInterval: 300.0, repeats: true) { [weak self] _ in
-            self?.fetchWindData()
-            self?.fetchExtraWeatherData()
+            self?.fetchWeather()
         }
     }
 
@@ -1698,52 +1643,50 @@ extension ViewController {
         windUpdateTimer = nil
     }
 
-    /// Haalt actuele wind op via Open-Meteo op basis van huidige locatie (of vaste haven als fallback).
-    func fetchWindData() {
-        let location = locationManager.location?.coordinate
-        let lat = location?.latitude ?? 52.4630
-        let lon = location?.longitude ?? 4.5480
-        let urlStr = "https://api.open-meteo.com/v1/forecast?latitude=\(lat)&longitude=\(lon)&current=wind_speed_10m,wind_direction_10m,wind_gusts_10m&wind_speed_unit=kn"
-        guard let url = URL(string: urlStr) else { return }
-        URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
-            guard let self = self, let data = data, error == nil else { return }
-            guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-                  let current = json["current"] as? [String: Any],
-                  let speedKn = current["wind_speed_10m"] as? Double,
-                  let dirDeg = current["wind_direction_10m"] as? Double else { return }
-            let gusts = (current["wind_gusts_10m"] as? Double) ?? 0.0
-            let bft = self.knotsToBeaufort(speedKn)
-            let arrow = self.windArrow(degrees: dirDeg)
-            let gustStr = gusts > 0 ? String(format: " (%.0f)", gusts) : ""
-            let subtitle = "\(arrow) Bft \(bft) · \(String(format: "%.1f", speedKn))\(gustStr) kn"
-            let coord = self.locationManager.location?.coordinate ?? CLLocationCoordinate2D(latitude: 52.4630, longitude: 4.5480)
-            self.lastWindSpeedKn = speedKn
-            self.lastWindDirDeg = dirDeg
-            DispatchQueue.main.async {
+    /// Haalt wind/weer (één verzoek) en golfhoogte op voor de huidige positie (of IJmuiden als fallback)
+    /// en zet ze in de infobalk. Ontbrekende waarden worden "—", nooit 0.
+    func fetchWeather() {
+        let plek = locationManager.location?.coordinate ?? WeatherService.fallback
+        WeatherService.haalActueel(op: plek) { [weak self] actueel in
+            guard let self = self, let a = actueel else { return }
+            if let kn = a.windKn, let richting = a.windRichting {
+                let bft = WeatherService.beaufort(knopen: kn)
+                let stoot = (a.windstootKn ?? 0) > 0 ? String(format: " (%.0f)", a.windstootKn ?? 0) : ""
+                let subtitle = "\(WeatherService.windPijl(graden: richting)) Bft \(bft) · \(String(format: "%.1f", kn))\(stoot) kn"
                 self.windInfoLabel.attributedText = self.bvkTitleAttributedText(subtitle: subtitle)
-                self.map.updateWindAnnotation(coordinate: coord, direction: dirDeg, beaufort: bft, speedKn: speedKn)
-                self.updateStromingLabel()
+                self.map.updateWindAnnotation(coordinate: plek, direction: richting, beaufort: bft, speedKn: kn)
             }
-        }.resume()
-    }
-
-    /// Herberekent en toont waveLabel: golf, stroming, neerslag.
-    func updateWaveLabel() {
-        let stromingKn = lastWindSpeedKn * 0.02
-        let arrow = windArrow(degrees: lastWindDirDeg)
-        var lines: [String] = []
-        lines.append("\(String(format: "%.1f", lastWaveHeightM))m golf")
-        lines.append("\(arrow) \(String(format: "%.2f", stromingKn)) kn stroom")
-        if lastPrecipitationMmH > 0 {
-            lines.append("🌧 \(String(format: "%.1f", lastPrecipitationMmH)) mm/u")
+            let temp = a.temperatuur.map { String(format: "%.1f°", $0) } ?? "—"
+            let gevoel = a.gevoelsTemperatuur.map { String(format: "%.1f°", $0) } ?? "—"
+            let zicht = a.zichtKm.map { String(format: "%.1f km", $0) } ?? "— km"
+            self.tempVisLabel.text = "  \(temp) / \(gevoel)\n  \(zicht)"
+            let druk = a.drukHPa.map { String(format: "%.0f hPa", $0) } ?? "— hPa"
+            let trend: String
+            switch a.drukTrend {
+            case .stijgend: trend = "▲ stijgend"
+            case .dalend: trend = "▼ dalend"
+            case .stabiel: trend = "→ stabiel"
+            case .onbekend: trend = ""
+            }
+            self.pressureLabel.text = "\(druk)\n\(trend)"
+            self.lastPrecipitationMmH = a.neerslagMmH ?? 0
+            self.updateWaveLabel()
         }
-        waveLabel.text = lines.joined(separator: "\n")
+        WeatherService.haalGolfhoogte(op: plek) { [weak self] hoogte in
+            self?.lastWaveHeightM = hoogte
+            self?.updateWaveLabel()
+        }
     }
 
-    /// Berekent windgedreven stroming voor de Noord-Hollandse kust en toont in waveLabel.
-    /// Kuststroming ≈ 2% van windsnelheid, richting ≈ windrichting.
-    func updateStromingLabel() {
-        updateWaveLabel()
+    /// Infobalk rechtsonder: golfhoogte en (alleen bij regen) neerslag.
+    /// De vroegere "stroom"-regel was 2% van de windsnelheid in de windrichting — geen echte
+    /// stroming (bij IJmuiden domineert het getij). Weggehaald: misleidend voor navigatie.
+    func updateWaveLabel() {
+        var regels = [lastWaveHeightM.map { String(format: "%.1fm golf", $0) } ?? "— golf"]
+        if lastPrecipitationMmH > 0 {
+            regels.append("🌧 \(String(format: "%.1f", lastPrecipitationMmH)) mm/u")
+        }
+        waveLabel.text = regels.joined(separator: "\n")
     }
 
     /// Maakt NSAttributedString met "RNH GPX TRACKER" in geel en subtitle in wit.
@@ -1754,32 +1697,6 @@ extension ViewController {
         title.append(NSAttributedString(string: subtitle,
             attributes: [.foregroundColor: UIColor.white, .font: font]))
         return title
-    }
-
-    /// Converteert knopen naar Beaufort-schaal.
-    func knotsToBeaufort(_ knots: Double) -> Int {
-        switch knots {
-        case ..<1:    return 0
-        case ..<4:    return 1
-        case ..<7:    return 2
-        case ..<11:   return 3
-        case ..<17:   return 4
-        case ..<22:   return 5
-        case ..<28:   return 6
-        case ..<34:   return 7
-        case ..<41:   return 8
-        case ..<48:   return 9
-        case ..<56:   return 10
-        case ..<64:   return 11
-        default:      return 12
-        }
-    }
-
-    /// Geeft een richtingspijl terug op basis van graden (vanwaar de wind komt).
-    func windArrow(degrees: Double) -> String {
-        let dirs = ["↓","↙","←","↖","↑","↗","→","↘"]
-        let index = Int((degrees + 22.5) / 45.0) % 8
-        return dirs[index]
     }
 
     /// Adjusts the visible map region based on the average speed over the last 60 seconds.

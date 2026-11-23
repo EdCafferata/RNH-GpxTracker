@@ -80,10 +80,8 @@ extension AboutViewController: WKNavigationDelegate {
         print("AboutViewController: decidePolicyForNavigationAction")
         
         if navigationAction.navigationType == .linkActivated {
-            if #available(iOS 10, *) {
-                UIApplication.shared.open(navigationAction.request.url!)
-            } else {
-                UIApplication.shared.openURL(navigationAction.request.url!)
+            if let url = navigationAction.request.url {
+                UIApplication.shared.open(url)
             }
             print("AboutViewController: external link sent to Safari")
             

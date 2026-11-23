@@ -130,3 +130,10 @@
 "DEFAULT_NAME_SAMPLE_OUTPUT_TITLE" = "Esempio: ";
 "DEFAULT_NAME_USE_UTC" = "Usare fuso orario UTC?";
 "DEFAULT_NAME_ENGLISH_LOCALE" = "Forza la formattazione della data basata sulla lingua inglese?";
+
+/* Opslaan: fout en bestaande naam */
+"SAVE_FAILED_TITLE" = "Salvataggio non riuscito";
+"SAVE_FAILED_MESSAGE" = "Il percorso non è stato salvato. Non è stato eliminato nulla: riprova, magari con un altro nome, oppure libera spazio sul telefono.";
+"FILE_EXISTS_TITLE" = "Il nome esiste già";
+"FILE_EXISTS_MESSAGE" = "Esiste già un percorso chiamato \"%@\". Vuoi sostituirlo?";
+"REPLACE" = "Sostituisci";

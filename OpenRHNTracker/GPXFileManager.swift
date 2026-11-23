@@ -49,7 +49,7 @@ class GPXFileManager: NSObject {
     ///     - filename: gpx filename with .gpx extension (f.i: `hola.gpx`) or without extension (f.i: `hola`)
     ///
     class func URLForFilename(_ filename: String) -> URL {
-        var fullURL = self.GPXFilesFolderURL.appendingPathComponent(filename)
+        var fullURL = self.GPXFilesFolderURL.appendingPathComponent(sanitizedFilename(filename))
         print("URLForFilename(\(filename): pathForFilename: \(fullURL)")
         // Check if filename has extension
         if  !(gpxExtList.contains(fullURL.pathExtension)) {
@@ -58,6 +58,18 @@ class GPXFileManager: NSObject {
         return fullURL
     }
     
+    ///
+    /// Maakt een bruikbare bestandsnaam: een "/" zou een (niet-bestaande) submap betekenen en ":"
+    /// is ongeldig, waardoor het opslaan stil mislukte. Lege naam wordt "track".
+    ///
+    class func sanitizedFilename(_ filename: String) -> String {
+        let cleaned = filename
+            .replacingOccurrences(of: "/", with: "-")
+            .replacingOccurrences(of: ":", with: "-")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+        return cleaned.isEmpty ? "track" : cleaned
+    }
+
     ///
     /// Returns true if the file with filename exists on the default folder (GPXFilesFolderURL).
     /// False in othercase.
@@ -75,25 +87,17 @@ class GPXFileManager: NSObject {
     ///     - fileURL: destination URL, basically it is file path.
     ///     - gpxContents: String with the contents to be saved. The XML contents of the GPX file
     ///
-    class func saveToURL(_ fileURL: URL, gpxContents: String) {
-        // Save file
-        print("Saving file at path: \(fileURL)")
-        // write gpx to file
-        var writeError: NSError?
-        let saved: Bool
+    /// - Returns: `true` als het bestand echt is weggeschreven. Bij `false` mag de aanroeper
+    ///   de herstelkopie NIET wissen (anders is de route weg).
+    @discardableResult
+    class func saveToURL(_ fileURL: URL, gpxContents: String) -> Bool {
         do {
-            try gpxContents.write(toFile: fileURL.path, atomically: true, encoding: String.Encoding.utf8)
-            saved = true
-        } catch let error as NSError {
-            writeError = error
-            saved = false
+            try gpxContents.write(to: fileURL, atomically: true, encoding: .utf8)
+            return true
+        } catch {
+            print("[ERROR] GPXFileManager:save \(fileURL.lastPathComponent): \(error.localizedDescription)")
+            return false
         }
-        if !saved {
-            if let error = writeError {
-                print("[ERROR] GPXFileManager:save: \(error.localizedDescription)")
-            }
-        }
-
     }
     ///
     /// Saves in the default folder the filename with the gpxContents
@@ -102,10 +106,9 @@ class GPXFileManager: NSObject {
     ///     - filename: gpx filename with .gpx extension (f.i: `hola.gpx`) or without extension (f.i: `hola`)
     ///     - gpxContents: String with the contents to be saved. The XML contents of the GPX file
     ///
-    class func save(_ filename: String, gpxContents: String) {
-        // Check if name exists
-        let fileURL: URL = self.URLForFilename(filename)
-        GPXFileManager.saveToURL(fileURL, gpxContents: gpxContents)
+    @discardableResult
+    class func save(_ filename: String, gpxContents: String) -> Bool {
+        return GPXFileManager.saveToURL(self.URLForFilename(filename), gpxContents: gpxContents)
     }
     
     ///
@@ -115,26 +118,33 @@ class GPXFileManager: NSObject {
     ///     - fileURL: URL of temporary file that should be moved/saved.
     ///     - fileName: name of temporary file, including the file extension (`.gpx`)
     ///
-    class func moveFrom(_ fileURL: URL, fileName: String?) {
-        
-        // check if file name is valid
-        guard let fileName = fileName else {
+    /// - Returns: de uiteindelijke bestandsnaam, of `nil` als het verplaatsen mislukte.
+    ///   Bestaat de naam al (bv. dezelfde route twee keer van de Watch gestuurd), dan wordt
+    ///   er " (2)", " (3)", … achter gezet in plaats van stil te mislukken.
+    @discardableResult
+    class func moveFrom(_ fileURL: URL, fileName: String?) -> String? {
+        guard let fileName = fileName, !fileName.isEmpty else {
             print("GPXFileManager:: save failed, error: file name is nil")
-            return
+            return nil
         }
-        
-        // attempt to move file
+        let safe = sanitizedFilename(fileName)
+        let ext = (safe as NSString).pathExtension
+        let base = (safe as NSString).deletingPathExtension
+        var candidate = safe
+        var counter = 2
+        while FileManager.default.fileExists(atPath: GPXFilesFolderURL.appendingPathComponent(candidate).path) {
+            candidate = "\(base) (\(counter))" + (ext.isEmpty ? "" : ".\(ext)")
+            counter += 1
+        }
         do {
-            let url = GPXFilesFolderURL.path + "/" + fileName
-            try FileManager().moveItem(atPath: fileURL.path, toPath: url)
-        }
-            
-        // file move failure
-        catch {
+            try FileManager.default.moveItem(at: fileURL, to: GPXFilesFolderURL.appendingPathComponent(candidate))
+            return candidate
+        } catch {
             print("GPXFileManager:: save failed, error: \(error)")
+            return nil
         }
     }
-    
+
     /// Removes a file on the specified URL
     class func removeFileFromURL(_ fileURL: URL) {
         print("Removing file at path: \(fileURL)")
