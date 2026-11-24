@@ -180,3 +180,16 @@
 "FILE_EXISTS_TITLE" = "Name already exists";
 "FILE_EXISTS_MESSAGE" = "A track named \"%@\" already exists. Do you want to replace it?";
 "REPLACE" = "Replace";
+
+/* Alltrexx.live (live meevaren) */
+"ALLTREXX_SHARE_LIVE" = "Share live on Alltrexx.live";
+"ALLTREXX_VIEW_MAP" = "View live map";
+"ALLTREXX_UNLINK" = "Unlink";
+"ALLTREXX_FOOTER" = "When on, your position is shared about every 15 seconds on alltrexx.live, visible to anyone viewing the map. Off = nothing is sent.";
+"ALLTREXX_NAME_TITLE" = "Name of your boat";
+"ALLTREXX_NAME_MESSAGE" = "You will appear under this name on the alltrexx.live map.";
+"ALLTREXX_NAME_PLACEHOLDER" = "E.g. Seagull";
+"ALLTREXX_LINK" = "Link";
+"ALLTREXX_ERROR_RATE" = "Too many requests in a row. Try again in a few minutes.";
+"ALLTREXX_ERROR_NAME" = "This name is not allowed. Choose another name.";
+"ALLTREXX_ERROR_SERVER" = "Alltrexx.live cannot be reached right now. Try again later.";

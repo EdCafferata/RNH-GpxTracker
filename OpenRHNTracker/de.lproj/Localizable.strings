@@ -137,3 +137,16 @@
 "FILE_EXISTS_TITLE" = "Name existiert bereits";
 "FILE_EXISTS_MESSAGE" = "Es gibt bereits eine Route namens \"%@\". Möchtest du sie ersetzen?";
 "REPLACE" = "Ersetzen";
+
+/* Alltrexx.live (live meevaren) */
+"ALLTREXX_SHARE_LIVE" = "Live teilen auf Alltrexx.live";
+"ALLTREXX_VIEW_MAP" = "Live-Karte ansehen";
+"ALLTREXX_UNLINK" = "Trennen";
+"ALLTREXX_FOOTER" = "Wenn aktiviert, wird deine Position etwa alle 15 Sekunden auf alltrexx.live geteilt und ist für alle sichtbar, die die Karte ansehen. Aus = es wird nichts gesendet.";
+"ALLTREXX_NAME_TITLE" = "Name deines Bootes";
+"ALLTREXX_NAME_MESSAGE" = "Unter diesem Namen erscheinst du auf der Karte von alltrexx.live.";
+"ALLTREXX_NAME_PLACEHOLDER" = "Z. B. Seeschwalbe";
+"ALLTREXX_LINK" = "Verbinden";
+"ALLTREXX_ERROR_RATE" = "Zu viele Anfragen hintereinander. Versuche es in ein paar Minuten erneut.";
+"ALLTREXX_ERROR_NAME" = "Dieser Name ist nicht erlaubt. Wähle einen anderen Namen.";
+"ALLTREXX_ERROR_SERVER" = "Alltrexx.live ist gerade nicht erreichbar. Versuche es später erneut.";

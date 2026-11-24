@@ -140,3 +140,16 @@
 "FILE_EXISTS_TITLE" = "Назва вже існує";
 "FILE_EXISTS_MESSAGE" = "Маршрут із назвою «%@» уже існує. Замінити його?";
 "REPLACE" = "Замінити";
+
+/* Alltrexx.live (live meevaren) */
+"ALLTREXX_SHARE_LIVE" = "Ділитися наживо на Alltrexx.live";
+"ALLTREXX_VIEW_MAP" = "Відкрити карту наживо";
+"ALLTREXX_UNLINK" = "Від'єднати";
+"ALLTREXX_FOOTER" = "Якщо увімкнено, ваше місцезнаходження передається приблизно кожні 15 секунд на alltrexx.live і видно всім, хто дивиться карту. Вимк. = нічого не надсилається.";
+"ALLTREXX_NAME_TITLE" = "Назва вашого човна";
+"ALLTREXX_NAME_MESSAGE" = "Під цією назвою ви з'явитеся на карті alltrexx.live.";
+"ALLTREXX_NAME_PLACEHOLDER" = "Напр. Чайка";
+"ALLTREXX_LINK" = "Під'єднати";
+"ALLTREXX_ERROR_RATE" = "Забагато запитів поспіль. Спробуйте за кілька хвилин.";
+"ALLTREXX_ERROR_NAME" = "Ця назва не дозволена. Виберіть іншу.";
+"ALLTREXX_ERROR_SERVER" = "Alltrexx.live зараз недоступний. Спробуйте пізніше.";

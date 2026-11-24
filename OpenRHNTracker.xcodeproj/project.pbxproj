@@ -24,6 +24,7 @@
 		838429DD2EDE5BF000CF3481 /* CoreGPX in Frameworks */ = {isa = PBXBuildFile; productRef = 838429DC2EDE5BF000CF3481 /* CoreGPX */; };
 		83ACE59C2EDE5ACB00FF4B77 /* MapCache in Frameworks */ = {isa = PBXBuildFile; productRef = 83ACE59B2EDE5ACB00FF4B77 /* MapCache */; };
 		83ACE59F2EDE5AE900FF4B77 /* CoreGPX in Frameworks */ = {isa = PBXBuildFile; productRef = 83ACE59E2EDE5AE900FF4B77 /* CoreGPX */; };
+		87F3B59CCF0E8DAB22AD94F4 /* AlltrexxKoppeling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B01ECBC28B4C2667312271E /* AlltrexxKoppeling.swift */; };
 		8913CD8C1BDB0A9A009EC729 /* PreferencesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8913CD8B1BDB0A9A009EC729 /* PreferencesTableViewController.swift */; };
 		8913CD8E1BDB2477009EC729 /* PreferencesTableViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8913CD8D1BDB2477009EC729 /* PreferencesTableViewControllerDelegate.swift */; };
 		893BEC8619C7E62200C77354 /* GPXWaypoint+MKAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893BEC8519C7E62200C77354 /* GPXWaypoint+MKAnnotation.swift */; };
@@ -190,6 +191,7 @@
 		12D4905524C448540065D995 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		12D4905624C448540065D995 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		12D4905724C448540065D995 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		2B01ECBC28B4C2667312271E /* AlltrexxKoppeling.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AlltrexxKoppeling.swift; sourceTree = "<group>"; };
 		455F78BE230AA9D6003705F3 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Main.strings; sourceTree = "<group>"; };
 		4588D66C230D23AA009AA75F /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4588D66E230D23AD009AA75F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -489,6 +491,7 @@
 				BF9AE57B2410011D00B103A0 /* DefaultNameSetupViewController.swift */,
 				RHN001004RHN001004RHN004 /* OWMRegistrationViewController.swift */,
 				5342D91D3C5F44318B69D560 /* WeatherService.swift */,
+				2B01ECBC28B4C2667312271E /* AlltrexxKoppeling.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -879,6 +882,7 @@
 				RHN001011RHN001011RHN011 /* OWMLegendView.swift in Sources */,
 				9E33F2FC8F35178791871D66 /* WeatherService.swift in Sources */,
 				245B4E0E3D88AB8F0AB19DFD /* SceneDelegate.swift in Sources */,
+				87F3B59CCF0E8DAB22AD94F4 /* AlltrexxKoppeling.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

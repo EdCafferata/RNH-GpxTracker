@@ -137,3 +137,16 @@
 "FILE_EXISTS_TITLE" = "Il nome esiste già";
 "FILE_EXISTS_MESSAGE" = "Esiste già un percorso chiamato \"%@\". Vuoi sostituirlo?";
 "REPLACE" = "Sostituisci";
+
+/* Alltrexx.live (live meevaren) */
+"ALLTREXX_SHARE_LIVE" = "Condividi in diretta su Alltrexx.live";
+"ALLTREXX_VIEW_MAP" = "Vedi mappa in diretta";
+"ALLTREXX_UNLINK" = "Scollega";
+"ALLTREXX_FOOTER" = "Se attivo, la tua posizione viene condivisa circa ogni 15 secondi su alltrexx.live, visibile a chiunque guardi la mappa. Disattivo = non viene inviato nulla.";
+"ALLTREXX_NAME_TITLE" = "Nome della tua barca";
+"ALLTREXX_NAME_MESSAGE" = "Apparirai con questo nome sulla mappa di alltrexx.live.";
+"ALLTREXX_NAME_PLACEHOLDER" = "Es. Gabbiano";
+"ALLTREXX_LINK" = "Collega";
+"ALLTREXX_ERROR_RATE" = "Troppe richieste di seguito. Riprova tra qualche minuto.";
+"ALLTREXX_ERROR_NAME" = "Questo nome non è consentito. Scegline un altro.";
+"ALLTREXX_ERROR_SERVER" = "Alltrexx.live non è raggiungibile ora. Riprova più tardi.";

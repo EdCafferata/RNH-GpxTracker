@@ -168,3 +168,16 @@
 "FILE_EXISTS_TITLE" = "Имя уже существует";
 "FILE_EXISTS_MESSAGE" = "Маршрут с именем «%@» уже существует. Заменить его?";
 "REPLACE" = "Заменить";
+
+/* Alltrexx.live (live meevaren) */
+"ALLTREXX_SHARE_LIVE" = "Делиться онлайн на Alltrexx.live";
+"ALLTREXX_VIEW_MAP" = "Открыть онлайн-карту";
+"ALLTREXX_UNLINK" = "Отвязать";
+"ALLTREXX_FOOTER" = "Если включено, ваше местоположение передаётся примерно каждые 15 секунд на alltrexx.live и видно всем, кто смотрит карту. Выкл. = ничего не отправляется.";
+"ALLTREXX_NAME_TITLE" = "Название вашей лодки";
+"ALLTREXX_NAME_MESSAGE" = "Под этим названием вы появитесь на карте alltrexx.live.";
+"ALLTREXX_NAME_PLACEHOLDER" = "Напр. Чайка";
+"ALLTREXX_LINK" = "Привязать";
+"ALLTREXX_ERROR_RATE" = "Слишком много запросов подряд. Попробуйте через несколько минут.";
+"ALLTREXX_ERROR_NAME" = "Это название не разрешено. Выберите другое.";
+"ALLTREXX_ERROR_SERVER" = "Alltrexx.live сейчас недоступен. Попробуйте позже.";

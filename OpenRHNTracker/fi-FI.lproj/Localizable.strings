@@ -124,3 +124,16 @@ Created by Phiilman on 28.03.20.
 "FILE_EXISTS_TITLE" = "Nimi on jo olemassa";
 "FILE_EXISTS_MESSAGE" = "Reitti nimeltä \"%@\" on jo olemassa. Haluatko korvata sen?";
 "REPLACE" = "Korvaa";
+
+/* Alltrexx.live (live meevaren) */
+"ALLTREXX_SHARE_LIVE" = "Jaa livenä Alltrexx.livessä";
+"ALLTREXX_VIEW_MAP" = "Näytä live-kartta";
+"ALLTREXX_UNLINK" = "Irrota";
+"ALLTREXX_FOOTER" = "Kun päällä, sijaintisi jaetaan noin 15 sekunnin välein alltrexx.livessä kaikkien karttaa katsovien nähtäväksi. Pois = mitään ei lähetetä.";
+"ALLTREXX_NAME_TITLE" = "Veneesi nimi";
+"ALLTREXX_NAME_MESSAGE" = "Näyt tällä nimellä alltrexx.liven kartalla.";
+"ALLTREXX_NAME_PLACEHOLDER" = "Esim. Lokki";
+"ALLTREXX_LINK" = "Yhdistä";
+"ALLTREXX_ERROR_RATE" = "Liian monta pyyntöä peräkkäin. Yritä uudelleen muutaman minuutin kuluttua.";
+"ALLTREXX_ERROR_NAME" = "Tämä nimi ei ole sallittu. Valitse toinen nimi.";
+"ALLTREXX_ERROR_SERVER" = "Alltrexx.live ei ole juuri nyt tavoitettavissa. Yritä myöhemmin uudelleen.";

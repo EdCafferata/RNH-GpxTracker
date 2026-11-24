@@ -171,3 +171,16 @@
 "FILE_EXISTS_TITLE" = "名称已存在";
 "FILE_EXISTS_MESSAGE" = "已存在名为“%@”的轨迹。要替换它吗？";
 "REPLACE" = "替换";
+
+/* Alltrexx.live (live meevaren) */
+"ALLTREXX_SHARE_LIVE" = "在 Alltrexx.live 实时共享";
+"ALLTREXX_VIEW_MAP" = "查看实时地图";
+"ALLTREXX_UNLINK" = "解除关联";
+"ALLTREXX_FOOTER" = "开启后，你的位置约每 15 秒在 alltrexx.live 上共享一次，查看地图的任何人都能看到。关闭 = 不发送任何内容。";
+"ALLTREXX_NAME_TITLE" = "你的船名";
+"ALLTREXX_NAME_MESSAGE" = "你将以此名称显示在 alltrexx.live 地图上。";
+"ALLTREXX_NAME_PLACEHOLDER" = "例如：海鸥";
+"ALLTREXX_LINK" = "关联";
+"ALLTREXX_ERROR_RATE" = "请求过于频繁。请几分钟后再试。";
+"ALLTREXX_ERROR_NAME" = "此名称不被允许。请换一个名称。";
+"ALLTREXX_ERROR_SERVER" = "目前无法连接 Alltrexx.live。请稍后再试。";

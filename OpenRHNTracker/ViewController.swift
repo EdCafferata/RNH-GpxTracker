@@ -2012,6 +2012,8 @@ extension ViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         // Registreer tijdstip voor GPS watchdog
         lastGPSUpdateDate = Date()
+        // Live meevaren op alltrexx.live (alleen als de gebruiker het in Voorkeuren aanzette).
+        if let laatste = locations.last { AlltrexxKoppeling.nieuwePositie(laatste) }
 
         // Update signal image accuracy
         let newLocation = locations.first!

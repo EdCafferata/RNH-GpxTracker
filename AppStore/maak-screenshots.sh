@@ -11,12 +11,17 @@ toestel() { # naam type
   [[ -z $id ]] && id=$(xcrun simctl create "$1" "$2")
   echo $id
 }
-typeset -A DEV=(
-  "iPhone 6.9 Display" "$(toestel 'iPhone 17 Pro Max' com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro-Max)"
-  "iPad Pro 13 Display" "$(toestel 'iPad Pro 13-inch (M5)' com.apple.CoreSimulator.SimDeviceType.iPad-Pro-13-inch-M5-12GB)"
-  "iPhone Duo Display" "$(toestel 'iPhone Duo' com.apple.CoreSimulator.SimDeviceType.iPhone-Duo)"
-)
-for slot id in ${(kv)DEV}; do
+# Toestellen (slotnaam → simulator). iPhone Duo: alleen als er een runtime voor is (iOS 27+).
+SLOTS=("iPhone 6.9 Display" "iPad Pro 13 Display")
+IDS=("$(toestel 'iPhone 17 Pro Max' com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro-Max)"
+     "$(toestel 'iPad Pro 13-inch (M5)' com.apple.CoreSimulator.SimDeviceType.iPad-Pro-13-inch-M5-12GB)")
+if duo=$(toestel 'iPhone Duo' com.apple.CoreSimulator.SimDeviceType.iPhone-Duo 2>/dev/null) && [[ $duo =~ ^[0-9A-F-]{36}$ ]]; then
+  SLOTS+=("iPhone Duo Display"); IDS+=("$duo")
+else
+  echo "iPhone Duo overgeslagen: geen simulator-runtime die het toestel ondersteunt"
+fi
+for i in {1..${#SLOTS}}; do
+  slot=${SLOTS[$i]}; id=${IDS[$i]}
   xcrun simctl boot $id 2>/dev/null || true; xcrun simctl bootstatus $id >/dev/null
   xcrun simctl status_bar $id override --time 9:41 --batteryState charged --batteryLevel 100 --cellularBars 4 --wifiBars 3
   xcodebuild build-for-testing -project OpenRHNTracker.xcodeproj -scheme OpenRHNTracker \

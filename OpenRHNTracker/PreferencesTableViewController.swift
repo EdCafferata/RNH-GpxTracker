@@ -13,29 +13,32 @@ import CoreLocation
 import MapCache
 import CoreServices
 
+/// Alltrexx.live (live meevaren) — bovenaan
+let kAlltrexxSection = 0
+
 /// Units Section Id in PreferencesTableViewController
-let kUnitsSection = 0
+let kUnitsSection = 1
 
 /// Screen always on section id
-let kScreenSection = 1
+let kScreenSection = 2
 
 /// Cache Section Id in PreferencesTableViewController
-let kCacheSection = 2
+let kCacheSection = 3
 
 /// Map Source Section Id in PreferencesTableViewController
-let kMapSourceSection = 3
+let kMapSourceSection = 4
 
 /// Activity Type Section Id in PreferencesTableViewController
-let kActivityTypeSection = 4
+let kActivityTypeSection = 5
 
 /// Default Name Section Id in PreferencesTableViewController
-let kDefaultNameSection = 5
+let kDefaultNameSection = 6
 
 /// GPX Files Location Section Id in PreferencesTableViewController
-let kGPXFilesLocationSection = 6
+let kGPXFilesLocationSection = 7
 
 /// Tracking Section Id in PreferencesTableViewController
-let kTrackingSection = 7
+let kTrackingSection = 8
 
 /// Cell Id for track interval in kTrackingSection
 let kTrackIntervalCell = 0
@@ -134,7 +137,7 @@ class PreferencesTableViewController: UITableViewController, UINavigationBarDele
     // MARK: - Table view data source
     
     override func numberOfSections(in tableView: UITableView?) -> Int {
-        return 8
+        return 9
     }
     
     /// Returns the title of the existing sections.
@@ -142,6 +145,7 @@ class PreferencesTableViewController: UITableViewController, UINavigationBarDele
     /// for deciding which is the section title
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
+        case kAlltrexxSection: return "Alltrexx.live"
         case kUnitsSection: return NSLocalizedString("UNITS", comment: "no comment")
         case kCacheSection: return NSLocalizedString("CACHE", comment: "no comment")
         case kMapSourceSection: return NSLocalizedString("MAP_SOURCE", comment: "no comment")
@@ -159,6 +163,7 @@ class PreferencesTableViewController: UITableViewController, UINavigationBarDele
     /// and for kActivityTypeSection returns `CLActivityType.count`
     override func tableView(_ tableView: UITableView?, numberOfRowsInSection section: Int) -> Int {
         switch section {
+        case kAlltrexxSection: return AlltrexxKoppeling.isGekoppeld ? 3 : 1
         case kCacheSection: return 2
         case kUnitsSection: return 1
         case kMapSourceSection: return GPXTileServer.count + 2 + OWMLayer.allCases.count // +1 wind, +1 OWM account, +OWM lagen
@@ -185,6 +190,8 @@ class PreferencesTableViewController: UITableViewController, UINavigationBarDele
     ///
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
+        case kAlltrexxSection:
+            return cellForAlltrexxSection(at: indexPath)
         case kUnitsSection:
             return cellForUnitsSection(at: indexPath)
         case kScreenSection:
@@ -387,6 +394,11 @@ class PreferencesTableViewController: UITableViewController, UINavigationBarDele
     /// In each case checks or unchecks the corresponding cell in the UI.
     ///
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.section == kAlltrexxSection {
+            didSelectAlltrexx(row: indexPath.row)
+            tableView.deselectRow(at: indexPath, animated: true)
+            return
+        }
         
         if indexPath.section == kUnitsSection {
             switch indexPath.row {
@@ -618,3 +630,73 @@ extension PreferencesTableViewController: OWMRegistrationDelegate {
         tableView.reloadSections(IndexSet(integer: kMapSourceSection), with: .automatic)
     }
 }
+
+// MARK: - Alltrexx.live (live meevaren)
+
+extension PreferencesTableViewController {
+
+    override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        section == kAlltrexxSection ? NSLocalizedString("ALLTREXX_FOOTER", comment: "") : nil
+    }
+
+    /// Rij 0: live delen aan/uit. Gekoppeld: rij 1 = bekijk live kaart, rij 2 = ontkoppelen.
+    func cellForAlltrexxSection(at indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell(style: .value1, reuseIdentifier: "AlltrexxCell")
+        switch indexPath.row {
+        case 0:
+            cell.textLabel?.text = NSLocalizedString("ALLTREXX_SHARE_LIVE", comment: "")
+            cell.detailTextLabel?.text = AlltrexxKoppeling.naam
+            cell.accessoryType = AlltrexxKoppeling.actief ? .checkmark : .none
+        case 1:
+            cell.textLabel?.text = NSLocalizedString("ALLTREXX_VIEW_MAP", comment: "")
+            cell.textLabel?.textColor = .systemBlue
+        default:
+            cell.textLabel?.text = NSLocalizedString("ALLTREXX_UNLINK", comment: "")
+            cell.textLabel?.textColor = .systemRed
+        }
+        return cell
+    }
+
+    func didSelectAlltrexx(row: Int) {
+        switch row {
+        case 0:
+            if AlltrexxKoppeling.actief {
+                AlltrexxKoppeling.actief = false
+                tableView.reloadSections(IndexSet(integer: kAlltrexxSection), with: .automatic)
+            } else if AlltrexxKoppeling.isGekoppeld {
+                AlltrexxKoppeling.actief = true
+                tableView.reloadSections(IndexSet(integer: kAlltrexxSection), with: .automatic)
+            } else {
+                vraagBootnaamEnKoppel()
+            }
+        case 1:
+            UIApplication.shared.open(AlltrexxKoppeling.liveKaartURL)
+        default:
+            AlltrexxKoppeling.ontkoppel()
+            tableView.reloadSections(IndexSet(integer: kAlltrexxSection), with: .automatic)
+        }
+    }
+
+    private func vraagBootnaamEnKoppel() {
+        let alert = UIAlertController(title: NSLocalizedString("ALLTREXX_NAME_TITLE", comment: ""),
+                                      message: NSLocalizedString("ALLTREXX_NAME_MESSAGE", comment: ""),
+                                      preferredStyle: .alert)
+        alert.addTextField { $0.placeholder = NSLocalizedString("ALLTREXX_NAME_PLACEHOLDER", comment: ""); $0.autocapitalizationType = .words }
+        alert.addAction(UIAlertAction(title: NSLocalizedString("CANCEL", comment: ""), style: .cancel))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("ALLTREXX_LINK", comment: ""), style: .default) { [weak self] _ in
+            let naam = alert.textFields?.first?.text?.trimmingCharacters(in: .whitespaces) ?? ""
+            guard !naam.isEmpty else { return }
+            AlltrexxKoppeling.koppel(naam: naam) { resultaat in
+                guard let self = self else { return }
+                if case .failure(let fout) = resultaat {
+                    let melding = UIAlertController(title: "Alltrexx.live", message: fout.localizedDescription, preferredStyle: .alert)
+                    melding.addAction(UIAlertAction(title: "OK", style: .default))
+                    self.present(melding, animated: true)
+                }
+                self.tableView.reloadData()
+            }
+        })
+        present(alert, animated: true)
+    }
+}
+

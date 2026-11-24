@@ -169,3 +169,16 @@
 "FILE_EXISTS_TITLE" = "Le nom existe déjà";
 "FILE_EXISTS_MESSAGE" = "Un parcours nommé « %@ » existe déjà. Voulez-vous le remplacer ?";
 "REPLACE" = "Remplacer";
+
+/* Alltrexx.live (live meevaren) */
+"ALLTREXX_SHARE_LIVE" = "Partager en direct sur Alltrexx.live";
+"ALLTREXX_VIEW_MAP" = "Voir la carte en direct";
+"ALLTREXX_UNLINK" = "Dissocier";
+"ALLTREXX_FOOTER" = "Si activé, votre position est partagée toutes les 15 secondes environ sur alltrexx.live, visible par tous ceux qui consultent la carte. Désactivé = rien n'est envoyé.";
+"ALLTREXX_NAME_TITLE" = "Nom de votre bateau";
+"ALLTREXX_NAME_MESSAGE" = "Vous apparaîtrez sous ce nom sur la carte d'alltrexx.live.";
+"ALLTREXX_NAME_PLACEHOLDER" = "Ex. Goéland";
+"ALLTREXX_LINK" = "Associer";
+"ALLTREXX_ERROR_RATE" = "Trop de demandes d'affilée. Réessayez dans quelques minutes.";
+"ALLTREXX_ERROR_NAME" = "Ce nom n'est pas autorisé. Choisissez-en un autre.";
+"ALLTREXX_ERROR_SERVER" = "Alltrexx.live est injoignable pour le moment. Réessayez plus tard.";

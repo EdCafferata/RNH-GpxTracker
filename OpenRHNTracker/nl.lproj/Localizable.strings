@@ -180,3 +180,16 @@
 "FILE_EXISTS_TITLE" = "Naam bestaat al";
 "FILE_EXISTS_MESSAGE" = "Er is al een route met de naam \"%@\". Wil je die vervangen?";
 "REPLACE" = "Vervangen";
+
+/* Alltrexx.live (live meevaren) */
+"ALLTREXX_SHARE_LIVE" = "Live delen op Alltrexx.live";
+"ALLTREXX_VIEW_MAP" = "Bekijk live kaart";
+"ALLTREXX_UNLINK" = "Ontkoppelen";
+"ALLTREXX_FOOTER" = "Als dit aan staat, wordt je positie ongeveer elke 15 seconden gedeeld op alltrexx.live, zichtbaar voor iedereen die de kaart bekijkt. Uit = er wordt niets verstuurd.";
+"ALLTREXX_NAME_TITLE" = "Naam van je boot";
+"ALLTREXX_NAME_MESSAGE" = "Onder deze naam verschijn je op de live kaart van alltrexx.live.";
+"ALLTREXX_NAME_PLACEHOLDER" = "Bijv. Zeezwaluw";
+"ALLTREXX_LINK" = "Koppelen";
+"ALLTREXX_ERROR_RATE" = "Te veel aanvragen achter elkaar. Probeer het over een paar minuten opnieuw.";
+"ALLTREXX_ERROR_NAME" = "Deze naam is niet toegestaan. Kies een andere naam.";
+"ALLTREXX_ERROR_SERVER" = "Alltrexx.live is nu niet bereikbaar. Probeer het later opnieuw.";
