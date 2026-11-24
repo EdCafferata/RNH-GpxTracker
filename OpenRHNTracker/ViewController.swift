@@ -421,6 +421,11 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         self.shareButton = UIButton(type: .custom)
         self.trackerButton = UIButton(type: .custom)
         self.saveButton = UIButton(type: .custom)
+        // Vaste namen voor UI-tests en screenshots (werken in elke taal).
+        self.trackerButton.accessibilityIdentifier = "trackerButton"
+        self.preferencesButton.accessibilityIdentifier = "preferencesButton"
+        self.folderButton.accessibilityIdentifier = "folderButton"
+        self.aboutButton.accessibilityIdentifier = "aboutButton"
 
         self.shareActivityIndicator = UIActivityIndicatorView()
         self.scaleBar = GPXScaleBar()
@@ -1583,19 +1588,24 @@ extension ViewController {
     /// Als de laatste update meer dan 10s geleden was, herstart de locationManager.
     func startGPSWatchdog() {
         gpsWatchdogTimer?.invalidate()
+        // Closure roept alleen een methode aan: `guard let self = self` hierbinnen liet de
+        // Swift 6.4-compiler crashen in Release-builds (TypeCheckDecl assertion).
         gpsWatchdogTimer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { [weak self] _ in
-            guard let self = self else { return }
-            guard let last = self.lastGPSUpdateDate else {
-                // Nog nooit een update gehad — probeer te starten
-                self.locationManager.startUpdatingLocation()
-                return
-            }
-            let elapsed = Date().timeIntervalSince(last)
-            if elapsed > 10.0 {
-                print("GPS watchdog: geen update sinds \(Int(elapsed))s — GPS fix herstellen")
-                self.locationManager.startUpdatingLocation()
-                self.locationManager.startUpdatingHeading()
-            }
+            self?.gpsWatchdogTick()
+        }
+    }
+
+    private func gpsWatchdogTick() {
+        guard let last = lastGPSUpdateDate else {
+            // Nog nooit een update gehad — probeer te starten
+            locationManager.startUpdatingLocation()
+            return
+        }
+        let elapsed = Date().timeIntervalSince(last)
+        if elapsed > 10.0 {
+            print("GPS watchdog: geen update sinds \(Int(elapsed))s — GPS fix herstellen")
+            locationManager.startUpdatingLocation()
+            locationManager.startUpdatingHeading()
         }
     }
 
