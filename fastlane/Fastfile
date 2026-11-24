@@ -11,6 +11,22 @@ PROJECT     = "OpenRHNTracker.xcodeproj"
 BUNDLE_ID   = "info.cafferata.RnhGpxTracker"
 SCREENSHOTS = "AppStore/Screenshots"
 
+# AppStore/Screenshots/<locale>/<toestel>/<naam>.png → fastlane/screenshots_flat/<locale>/<toestel>-<naam>.png
+# (deliver leest geen toestel-submappen). Alleen de talen van de listing: nl-NL en en-US.
+def flat_screenshots
+  root = File.expand_path("..", __dir__)
+  dst  = File.join(root, "fastlane", "screenshots_flat")
+  FileUtils.rm_rf(dst)
+  %w[nl-NL en-US].each do |locale|
+    Dir.glob(File.join(root, SCREENSHOTS, locale, "*", "*.png")).each do |f|
+      device = File.basename(File.dirname(f))
+      FileUtils.mkdir_p(File.join(dst, locale))
+      FileUtils.cp(f, File.join(dst, locale, "#{device.gsub(/[^A-Za-z0-9.]+/, "_")}-#{File.basename(f)}"))
+    end
+  end
+  dst
+end
+
 platform :ios do
 
   # ─── TestFlight ────────────────────────────────────────────────────────────
@@ -62,6 +78,23 @@ platform :ios do
       submission_information: {
         add_id_info_uses_idfa: false
       }
+    )
+  end
+
+  # ─── Screenshots naar een versie in voorbereiding: fastlane shots version:2.3.0 ─
+  lane :shots do |o|
+    upload_to_app_store(
+      api_key:                              API_KEY,
+      app_identifier:                       BUNDLE_ID,
+      app_version:                          o[:version],
+      skip_binary_upload:                   true,
+      skip_metadata:                        true,
+      skip_app_version_update:              true,
+      overwrite_screenshots:                true,
+      force:                                true,
+      run_precheck_before_submit:           false,
+      screenshots_path:                     flat_screenshots,
+      ignore_language_directory_validation: true
     )
   end
 

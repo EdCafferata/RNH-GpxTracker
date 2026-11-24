@@ -44,3 +44,4 @@ tijdelijk/
 *.pem
 *.mobileprovision
 fastlane/report.xml
+fastlane/screenshots_flat/
