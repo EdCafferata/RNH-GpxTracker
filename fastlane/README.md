@@ -31,6 +31,14 @@ Build en upload naar TestFlight
 
 Build, upload naar App Store en dien in ter beoordeling
 
+### ios shots
+
+```sh
+[bundle exec] fastlane ios shots
+```
+
+
+
 ### ios screenshots
 
 ```sh
