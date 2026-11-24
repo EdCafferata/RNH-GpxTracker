@@ -26,9 +26,11 @@ for i in {1..${#SLOTS}}; do
   xcrun simctl status_bar $id override --time 9:41 --batteryState charged --batteryLevel 100 --cellularBars 4 --wifiBars 3
   xcodebuild build-for-testing -project OpenRHNTracker.xcodeproj -scheme OpenRHNTracker \
     -destination "id=$id" -derivedDataPath "$DD" CODE_SIGNING_ALLOWED=NO -quiet
-  xcrun simctl install $id "$DD/Build/Products/Debug-iphonesimulator/OpenRHNTracker.app"
-  xcrun simctl privacy $id grant location-always $BUNDLE || true
   for lang loc in ${(kv)LOC}; do
+    # Per taal schoon beginnen (anders neemt de app de opname van de vorige run over).
+    xcrun simctl uninstall $id $BUNDLE 2>/dev/null || true
+    xcrun simctl install $id "$DD/Build/Products/Debug-iphonesimulator/OpenRHNTracker.app"
+    xcrun simctl privacy $id grant location-always $BUNDLE || true
     xcrun simctl location $id clear || true
     # Route: uit de haven van IJmuiden de Noordzee op, ±6 knopen.
     xcrun simctl location $id start --speed=3 52.4634,4.5790 52.4652,4.5600 52.4675,4.5400 52.4700,4.5200 &
