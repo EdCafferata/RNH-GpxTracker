@@ -125,7 +125,8 @@ class MapViewDelegate: NSObject, MKMapViewDelegate, UIAlertViewDelegate {
             alertController.addAction(saveAction)
             alertController.addAction(cancelAction)
             
-            UIApplication.shared.keyWindow?.rootViewController?.present(alertController, animated: true)
+            UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+                .flatMap { $0.windows }.first { $0.isKeyWindow }?.rootViewController?.present(alertController, animated: true)
             
             self.waypointBeingEdited = waypoint
             

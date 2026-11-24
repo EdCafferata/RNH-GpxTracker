@@ -12,6 +12,7 @@
 		120DE71122B274A40055C4CB /* GPXSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120DE70F22B274910055C4CB /* GPXSession.swift */; };
 		12491EA328D7057D009F6BE1 /* MKMapView+ConvenientOverlayInserts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12491EA228D7057D009F6BE1 /* MKMapView+ConvenientOverlayInserts.swift */; };
 		12A1A44424D561AC0057ED7A /* CoreDataHelper+FetchRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12A1A44324D561AC0057ED7A /* CoreDataHelper+FetchRequests.swift */; };
+		245B4E0E3D88AB8F0AB19DFD /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B9C6603978C26C11102C49 /* SceneDelegate.swift */; };
 		4588D66B230D23AA009AA75F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4588D66D230D23AA009AA75F /* InfoPlist.strings */; };
 		4588D66F230D2476009AA75F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4588D671230D2476009AA75F /* InfoPlist.strings */; };
 		45A430E9230D61240003C2F2 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45A430EB230D61240003C2F2 /* Interface.storyboard */; };
@@ -287,6 +288,7 @@
 		D39420E623CC1B0500EDC8F6 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		DC4908A01C4A136F009484AE /* TrackerButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackerButton.swift; sourceTree = "<group>"; };
 		DC4908A21C4A332E009484AE /* MapViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewDelegate.swift; sourceTree = "<group>"; };
+		E2B9C6603978C26C11102C49 /* SceneDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		RHN001002RHN001002RHN002 /* OWMTileOverlay.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; includeInIndex = 1; path = OWMTileOverlay.swift; sourceTree = "<group>"; };
 		RHN001004RHN001004RHN004 /* OWMRegistrationViewController.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; includeInIndex = 1; path = OWMRegistrationViewController.swift; sourceTree = "<group>"; };
 		RHN001006RHN001006RHN006 /* WindAnnotation.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; includeInIndex = 1; path = WindAnnotation.swift; sourceTree = "<group>"; };
@@ -494,6 +496,7 @@
 				898EECDA19C49B5800B4B207 /* AppDelegate.swift */,
 				899D678519D354EB00C88A0A /* about.html */,
 				898EECE419C49B5800B4B207 /* Images.xcassets */,
+				E2B9C6603978C26C11102C49 /* SceneDelegate.swift */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -806,6 +809,7 @@
 				RHN001009RHN001009RHN009 /* SatelliteTileOverlay.swift in Sources */,
 				RHN001011RHN001011RHN011 /* OWMLegendView.swift in Sources */,
 				9E33F2FC8F35178791871D66 /* WeatherService.swift in Sources */,
+				245B4E0E3D88AB8F0AB19DFD /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

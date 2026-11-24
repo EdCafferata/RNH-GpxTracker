@@ -12,7 +12,7 @@ Registreert GPS-sporen op het water, slaat op als GPX, deelt via e-mail/AirDrop.
 - **Project:** `/Volumes/Backup-Ed/AI/RHN-GpxTracker/`
 - **Xcode project:** `OpenRHNTracker.xcodeproj`
 - **Bundle ID:** `info.cafferata.RnhGpxTracker`
-- **GitHub:** https://github.com/EdCafferata/RHN-GpxTracker — branch: `main`
+- **GitHub:** https://github.com/EdCafferata/RNH-GpxTracker — branch: `main`
 - **Versie:** `2.2.0` (in ontwikkeling, nog niet uitgebracht op App Store)
 - **Live versie:** `2.0.0` — https://apps.apple.com/nl/app/rhn-tracker/id1598986930
 - **Ed's iPhone device ID:** `00008110-000E791A3AD9801E`
@@ -66,7 +66,8 @@ Reden: Xcode 26.5 vereist watchOS 26.5 simulator die nog niet beschikbaar is.
 - **Watch app:** WatchKit, `InterfaceController.swift`
 - **Kaartservers:** Apple, OpenStreetMap, OpenSeaMap, CartoDB, CartoDB Dark, OpenTopoMap
 - **Tile caching:** MapCache package
-- `NSAllowsArbitraryLoads = true` in Info.plist (vereist voor HTTP tile servers)
+- Geen ATS-uitzondering meer: alle bronnen zijn https (NSAllowsArbitraryLoads verwijderd 23 nov 2026)
+- **UIScene-levenscyclus** (SceneDelegate + UIApplicationSceneManifest, 24 nov 2026): nieuwste iOS start apps zonder scenes niet meer
 
 ## Architectuur — ViewController.swift (iPhone)
 - `speedReadings: [(date: Date, speedMs: Double)]` — sliding window 60s voor snelheidszoom

@@ -471,7 +471,8 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         // Because of the edges, iPhone X* is slightly different on the layout.
         // So, Is the current device an iPhone X?
         if UIDevice.current.userInterfaceIdiom == .phone, #available(iOS 11, *) {
-            self.isIPhoneX = UIApplication.shared.delegate?.window??.safeAreaInsets.top ?? 0 > 40
+            let venster = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }.flatMap { $0.windows }.first
+            self.isIPhoneX = (venster?.safeAreaInsets.top ?? 0) > 40
         }
         
         // Map autorotate configuration

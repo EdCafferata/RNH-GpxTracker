@@ -18,8 +18,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     /// Default placeholder function
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        // Verbinding met de Apple Watch. Stond in applicationDidBecomeActive, maar die wordt met
+        // de scene-levenscyclus niet meer aangeroepen.
+        if WCSession.isSupported() {
+            let session = WCSession.default
+            session.delegate = self
+            session.activate()
+        }
         return true
+    }
+
+    /// Eén scene, ingericht via UIApplicationSceneManifest (Info.plist) met Main.storyboard.
+    func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession,
+                     options: UIScene.ConnectionOptions) -> UISceneConfiguration {
+        return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
     }
 
     /// Default placeholder function
@@ -47,47 +59,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     /// Default placeholder function
-    func applicationDidBecomeActive(_ application: UIApplication) {
-        if #available(iOS 9.0, *) {
-            if WCSession.isSupported() {
-                print("AppDelegate:: WCSession is supported")
-                let session = WCSession.default
-                session.delegate = self
-                session.activate()
-                print("AppDelegate:: WCSession activated")
-            } else {
-                print("AppDelegate:: WCSession is not supported")
-            }
-        }
-        // Restart any tasks that were paused (or not yet started) while the application was inactive. 
-        // If the application was previously in the background, optionally refresh the user interface.
-    }
-
-    /// Default placeholder function
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
         // self.saveContext()
     }
     
-    /// Default pandle load GPX file
-    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
-        print("load gpx File: \(url.absoluteString)")
-        let fileManager = FileManager.default
+    /// Kopieert een GPX-bestand dat via "Openen met" binnenkomt naar de routemap (aangeroepen door SceneDelegate).
+    static func importGPX(from url: URL) {
+        let toegang = url.startAccessingSecurityScopedResource()
+        defer { if toegang { url.stopAccessingSecurityScopedResource() } }
         do {
-            _ = url.startAccessingSecurityScopedResource()
-            try fileManager.copyItem(at: url, to: GPXFileManager.GPXFilesFolderURL.appendingPathComponent(url.lastPathComponent))
-            url.stopAccessingSecurityScopedResource()
-        } catch let error as NSError {
-            print("Ooops! Something went wrong: \(error)")
+            try FileManager.default.copyItem(at: url, to: GPXFileManager.GPXFilesFolderURL.appendingPathComponent(url.lastPathComponent))
+        } catch {
+            print("AppDelegate:: GPX importeren mislukt: \(error)")
         }
-        
-        // post a notification when a file is received through this method.
         NotificationCenter.default.post(name: .didReceiveFileFromURL, object: nil)
-        
-        return true
     }
-    
+
     // MARK: - Core Data stack
 
     /// Default placeholder function
