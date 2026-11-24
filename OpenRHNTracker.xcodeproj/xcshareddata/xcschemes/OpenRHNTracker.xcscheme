@@ -47,6 +47,16 @@
                ReferencedContainer = "container:OpenRHNTracker.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7CBD8AAA502333966FE09303"
+               BuildableName = "OpenRHNTrackerUITests.xctest"
+               BlueprintName = "OpenRHNTrackerUITests"
+               ReferencedContainer = "container:OpenRHNTracker.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

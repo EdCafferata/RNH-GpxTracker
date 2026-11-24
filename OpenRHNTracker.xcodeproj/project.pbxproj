@@ -12,10 +12,12 @@
 		120DE71122B274A40055C4CB /* GPXSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120DE70F22B274910055C4CB /* GPXSession.swift */; };
 		12491EA328D7057D009F6BE1 /* MKMapView+ConvenientOverlayInserts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12491EA228D7057D009F6BE1 /* MKMapView+ConvenientOverlayInserts.swift */; };
 		12A1A44424D561AC0057ED7A /* CoreDataHelper+FetchRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12A1A44324D561AC0057ED7A /* CoreDataHelper+FetchRequests.swift */; };
+		17E6A62CF96C8D1F99EB82BE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF46995152B4F5B01270D4F4 /* Foundation.framework */; };
 		245B4E0E3D88AB8F0AB19DFD /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B9C6603978C26C11102C49 /* SceneDelegate.swift */; };
 		4588D66B230D23AA009AA75F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4588D66D230D23AA009AA75F /* InfoPlist.strings */; };
 		4588D66F230D2476009AA75F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4588D671230D2476009AA75F /* InfoPlist.strings */; };
 		45A430E9230D61240003C2F2 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45A430EB230D61240003C2F2 /* Interface.storyboard */; };
+		5BA0355948703851B52E5DAD /* SmokeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B94709BCFE4F903C7B7710 /* SmokeUITests.swift */; };
 		830E80542EDE5D1B003956D6 /* CoreGPX in Frameworks */ = {isa = PBXBuildFile; productRef = 830E80532EDE5D1B003956D6 /* CoreGPX */; };
 		836B1BAD2E7DC69900285130 /* ViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836B1BAC2E7DC69900285130 /* ViewControllerTests.swift */; };
 		838429DD2EDE5BF000CF3481 /* CoreGPX in Frameworks */ = {isa = PBXBuildFile; productRef = 838429DC2EDE5BF000CF3481 /* CoreGPX */; };
@@ -131,6 +133,13 @@
 			remoteGlobalIDString = BF692F562209AAF900F8A0F1;
 			remoteInfo = "OpenRHNTracker-Watch";
 		};
+		C6CDEBA47A6C13560F43B814 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 898EECCD19C49B5800B4B207 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 898EECD419C49B5800B4B207;
+			remoteInfo = OpenRHNTracker;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -188,6 +197,7 @@
 		45A430EA230D61240003C2F2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
 		45A430ED230D612B0003C2F2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Interface.strings; sourceTree = "<group>"; };
 		45A430EF230D612C0003C2F2 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Interface.strings; sourceTree = "<group>"; };
+		45B94709BCFE4F903C7B7710 /* SmokeUITests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SmokeUITests.swift; sourceTree = "<group>"; };
 		5342D91D3C5F44318B69D560 /* WeatherService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WeatherService.swift; sourceTree = "<group>"; };
 		836B1BAC2E7DC69900285130 /* ViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerTests.swift; sourceTree = "<group>"; };
 		836B1BAE2E7DC7D500285130 /* MapCache.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MapCache.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -282,6 +292,7 @@
 		BFF3047C2312D8A00012D263 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		BFF3047D2312D8A10012D263 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		BFF3047E2312D8A10012D263 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		D008DFA90C7AB7FE99CD9D1C /* OpenRHNTrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OpenRHNTrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D39420E323CC1B0500EDC8F6 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Interface.strings; sourceTree = "<group>"; };
 		D39420E423CC1B0500EDC8F6 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D39420E523CC1B0500EDC8F6 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -289,6 +300,7 @@
 		DC4908A01C4A136F009484AE /* TrackerButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackerButton.swift; sourceTree = "<group>"; };
 		DC4908A21C4A332E009484AE /* MapViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewDelegate.swift; sourceTree = "<group>"; };
 		E2B9C6603978C26C11102C49 /* SceneDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		FF46995152B4F5B01270D4F4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		RHN001002RHN001002RHN002 /* OWMTileOverlay.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; includeInIndex = 1; path = OWMTileOverlay.swift; sourceTree = "<group>"; };
 		RHN001004RHN001004RHN004 /* OWMRegistrationViewController.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; includeInIndex = 1; path = OWMRegistrationViewController.swift; sourceTree = "<group>"; };
 		RHN001006RHN001006RHN006 /* WindAnnotation.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; includeInIndex = 1; path = WindAnnotation.swift; sourceTree = "<group>"; };
@@ -298,6 +310,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		6BA0AE53E8E55B95E80B6496 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				17E6A62CF96C8D1F99EB82BE /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		898EECD219C49B5800B4B207 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -378,6 +398,7 @@
 				BF692F672209AAFB00F8A0F1 /* OpenRHNTracker-Watch Extension */,
 				898EED0119C4A16600B4B207 /* Frameworks */,
 				898EECD619C49B5800B4B207 /* Products */,
+				90B78FCF49ECD850DA205A7B /* OpenRHNTrackerUITests */,
 			);
 			sourceTree = "<group>";
 		};
@@ -388,6 +409,7 @@
 				898EECED19C49B5800B4B207 /* OpenRHNTrackerTests.xctest */,
 				BF692F572209AAF900F8A0F1 /* OpenRHNTracker-Watch.app */,
 				BF692F632209AAFB00F8A0F1 /* OpenRHNTracker-Watch Extension.appex */,
+				D008DFA90C7AB7FE99CD9D1C /* OpenRHNTrackerUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -447,6 +469,7 @@
 				899D677719CF0A9F00C88A0A /* MessageUI.framework */,
 				898EECFF19C4A15E00B4B207 /* CoreLocation.framework */,
 				898EECFD19C49DC700B4B207 /* MapKit.framework */,
+				9B868AA9BFF14EF80264A025 /* iOS */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -512,6 +535,23 @@
 			name = shared;
 			sourceTree = "<group>";
 		};
+		90B78FCF49ECD850DA205A7B /* OpenRHNTrackerUITests */ = {
+			isa = PBXGroup;
+			children = (
+				45B94709BCFE4F903C7B7710 /* SmokeUITests.swift */,
+			);
+			name = OpenRHNTrackerUITests;
+			path = OpenRHNTrackerUITests;
+			sourceTree = "<group>";
+		};
+		9B868AA9BFF14EF80264A025 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				FF46995152B4F5B01270D4F4 /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
 		BF692F582209AAF900F8A0F1 /* OpenRHNTracker-Watch */ = {
 			isa = PBXGroup;
 			children = (
@@ -540,6 +580,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		7CBD8AAA502333966FE09303 /* OpenRHNTrackerUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1EAC7EB9ED1EBEE4D884905E /* Build configuration list for PBXNativeTarget "OpenRHNTrackerUITests" */;
+			buildPhases = (
+				D5A609BF292F7F68922EE787 /* Sources */,
+				6BA0AE53E8E55B95E80B6496 /* Frameworks */,
+				46C7D82D7AA9B464BDDBC661 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1BA8F442B4A0267A5254C51C /* PBXTargetDependency */,
+			);
+			name = OpenRHNTrackerUITests;
+			productName = OpenRHNTrackerUITests;
+			productReference = D008DFA90C7AB7FE99CD9D1C /* OpenRHNTrackerUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		898EECD419C49B5800B4B207 /* OpenRHNTracker */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 898EECF719C49B5800B4B207 /* Build configuration list for PBXNativeTarget "OpenRHNTracker" */;
@@ -686,11 +744,19 @@
 				898EECEC19C49B5800B4B207 /* OpenRHNTrackerTests */,
 				BF692F562209AAF900F8A0F1 /* OpenRHNTracker-Watch */,
 				BF692F622209AAFB00F8A0F1 /* OpenRHNTracker-Watch Extension */,
+				7CBD8AAA502333966FE09303 /* OpenRHNTrackerUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		46C7D82D7AA9B464BDDBC661 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		898EECD319C49B5800B4B207 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -850,9 +916,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D5A609BF292F7F68922EE787 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5BA0355948703851B52E5DAD /* SmokeUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		1BA8F442B4A0267A5254C51C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = OpenRHNTracker;
+			target = 898EECD419C49B5800B4B207 /* OpenRHNTracker */;
+			targetProxy = C6CDEBA47A6C13560F43B814 /* PBXContainerItemProxy */;
+		};
 		898EECEF19C49B5800B4B207 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 898EECD419C49B5800B4B207 /* OpenRHNTracker */;
@@ -969,6 +1049,24 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		23DBD63595BFEF691DAED08C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 9J2S23WJH3;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_BUNDLE_IDENTIFIER = info.cafferata.RnhGpxTrackerUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = OpenRHNTracker;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		898EECF519C49B5800B4B207 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1313,9 +1411,35 @@
 			};
 			name = Release;
 		};
+		CBBEBC9C780A9196F9C8D070 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 9J2S23WJH3;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_BUNDLE_IDENTIFIER = info.cafferata.RnhGpxTrackerUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = OpenRHNTracker;
+			};
+			name = Debug;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		1EAC7EB9ED1EBEE4D884905E /* Build configuration list for PBXNativeTarget "OpenRHNTrackerUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				23DBD63595BFEF691DAED08C /* Release */,
+				CBBEBC9C780A9196F9C8D070 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		898EECD019C49B5800B4B207 /* Build configuration list for PBXProject "OpenRHNTracker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
