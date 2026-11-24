@@ -1,1 +1,1 @@
-RNH;Rondeomnoordholland;YSY;YsY;Tracker,Open Street map,Open Sea Map,Cafferata,GPX Viewer,RNH Viewer
+sailing,gps tracker,regatta,gpx,boat,yacht,nautical chart,openseamap,wind,tide,route,logbook,race

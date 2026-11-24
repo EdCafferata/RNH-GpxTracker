@@ -1,6 +1,6 @@
-Version 2.2.1
-
-Fixed
-• Map tiles stopped loading after a change at the map provider. Fixed with a new, free map source (road map).
-• Smoother zooming with a sensible maximum zoom level.
-• Removed two rarely used grey map layers.
+New in 2.3.0:
+• Works again on the latest iOS (the app no longer started there).
+• Tracks are never silently lost when saving; with an existing name the app asks before replacing.
+• IJmuiden water level works again; missing weather values show "—" instead of 0.
+• The estimated "current" was removed: it was not a real current.
+• New, calm launch screen and a button to rate the app.

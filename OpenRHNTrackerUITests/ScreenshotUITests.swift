@@ -15,11 +15,23 @@ final class ScreenshotUITests: XCTestCase {
         app.launch()
         XCTAssertTrue(app.buttons["trackerButton"].waitForExistence(timeout: 30))
 
+        // iOS-vraag "ook als je de app niet gebruikt?" (Always-upgrade) wegtikken: tweede knop = "Altijd".
+        func sluitSysteemvraag() {
+            let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+            let vraag = springboard.alerts.firstMatch
+            if vraag.waitForExistence(timeout: 3) {
+                let knoppen = vraag.buttons
+                (knoppen.count > 1 ? knoppen.element(boundBy: 1) : knoppen.firstMatch).tap()
+            }
+        }
+
         func bewaar(_ naam: String) throws {
+            sluitSysteemvraag()
             let url = URL(fileURLWithPath: dir).appendingPathComponent("\(prefix)~\(naam).png")
             try XCUIScreen.main.screenshot().pngRepresentation.write(to: url)
         }
 
+        sluitSysteemvraag()
         sleep(12)                      // weer, wind en waterstand laden
         try bewaar("1-kaart")
         app.buttons["trackerButton"].tap()

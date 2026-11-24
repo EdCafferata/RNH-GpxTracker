@@ -1,6 +1,6 @@
-Versie 2.2.1
-
-Opgelost
-• De kaarttegels laadden niet meer door een wijziging bij de kaartprovider. Dit is opgelost met een nieuwe, gratis kaartbron (Wegenkaart).
-• Vloeiender inzoomen met een nette maximale zoom.
-• Twee weinig gebruikte grijze kaartlagen verwijderd.
+Nieuw in 2.3.0:
+• Werkt weer op de nieuwste iOS (de app startte daar niet meer).
+• Routes gaan nooit meer stil verloren bij opslaan; bij een bestaande naam vraagt de app eerst of je wilt vervangen.
+• Waterstand IJmuiden werkt weer; ontbrekende weerwaarden tonen "—" in plaats van 0.
+• De geschatte "stroom" is weggehaald: die was geen echte stroming.
+• Nieuw, rustig opstartscherm en een knop om de app te beoordelen.

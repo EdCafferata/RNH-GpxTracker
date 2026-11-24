@@ -5,7 +5,7 @@ set -e
 cd "${0:A:h}/.."
 DD=${DD:-$HOME/rnh-shots-dd}; OUT=$(mktemp -d)
 BUNDLE=info.cafferata.RnhGpxTracker
-typeset -A LOC=(nl nl-NL en en-US de de-DE es es-ES fr fr-FR it it fi fi pt-BR pt-BR ru ru uk uk zh-Hans zh-Hans)
+typeset -A LOC=(nl nl-NL en en-US)   # de App Store-listing heeft alleen NL en EN
 toestel() { # naam type
   local id=$(xcrun simctl list devices available | grep -F "$1 (" | head -1 | grep -oE '[0-9A-F-]{36}')
   [[ -z $id ]] && id=$(xcrun simctl create "$1" "$2")
