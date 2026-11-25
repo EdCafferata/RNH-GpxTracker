@@ -29,20 +29,14 @@ enum GPXTileServer: Int {
     case openStreetMap
     // case AnotherMap
 
-    /// Esri keyless wegenkaart (voorheen CartoDB — Carto heeft z'n gratis keyless
-    /// basemaps afgeknepen, okt 2026). Esri World_Street_Map, geen account/key nodig.
-    case cartoDB
 
-    /// OpenTopoMap tile server
-    case openTopoMap
 
     /// OpenSeaMap tile server
     case openSeaMap
 
-    // Verwijderd okt 2026 (op verzoek Ed): .cartoDBRetina ("Licht grijs") en
-    // .cartoDBDark ("Donker grijs"). De gratis Esri-canvas-lagen hadden alleen echte
-    // tegels tot z16 en te weinig beeld boven water; ze bevielen niet. Alleen de
-    // Wegenkaart (Esri, .cartoDB) blijft over.
+    // Verwijderd: .cartoDBRetina/.cartoDBDark (okt 2026) en .cartoDB (Esri-wegenkaart) +
+    // .openTopoMap (25 nov 2026, op verzoek Ed: traag en haperend). Over: Apple, Apple Satelliet,
+    // OpenStreetMap, OpenSeaMap. Opgeslagen keuzes buiten bereik vallen terug op OpenSeaMap (Preferences).
 
     /// String that describes the selected tile server.
     var name: String {
@@ -50,8 +44,6 @@ enum GPXTileServer: Int {
         case .apple: return "Apple Mapkit (no offline cache)"
         case .appleSatellite: return "Apple Satellite (no offline cache)"
         case .openStreetMap: return "OpenStreetMap"
-        case .cartoDB: return "Wegenkaart (Esri)"
-        case .openTopoMap: return "OpenTopoMap"
         case .openSeaMap: return "OpenSeaMap"
         }
     }
@@ -62,10 +54,6 @@ enum GPXTileServer: Int {
         case .apple: return ""
         case .appleSatellite: return ""
         case .openStreetMap: return "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        // Esri keyless (geen account/key). Let op: Esri gebruikt {z}/{y}/{x} (y vóór x) en
-        // géén subdomeinen. MapCache vervangt de tokens los van volgorde.
-        case .cartoDB: return "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}"
-        case .openTopoMap: return "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png"
         case .openSeaMap: return "https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png"
         }
     }
@@ -82,8 +70,6 @@ enum GPXTileServer: Int {
         case .apple: return []
         case .appleSatellite: return []
         case .openStreetMap: return ["a", "b", "c"]
-        case .cartoDB: return []
-        case .openTopoMap: return ["a", "b", "c"]
         case .openSeaMap: return []
         }
     }
@@ -106,10 +92,6 @@ enum GPXTileServer: Int {
             return -1
         case .openStreetMap:
             return 19
-        case .cartoDB:
-            return 19
-        case .openTopoMap:
-            return 17
         // case .AnotherMap: return 10
         case .openSeaMap:
             return 18
@@ -130,10 +112,6 @@ enum GPXTileServer: Int {
         case .appleSatellite:
             return 0
         case .openStreetMap:
-            return 0
-        case .cartoDB:
-            return 0
-        case .openTopoMap:
             return 0
         case .openSeaMap:
             return 0
@@ -168,7 +146,7 @@ enum GPXTileServer: Int {
         switch self {
         case .apple: return .system
         case .appleSatellite: return .darkMode
-        case .cartoDB, .openTopoMap, .openSeaMap, .openStreetMap: return .lightMode
+        case .openSeaMap, .openStreetMap: return .lightMode
         }
     }
 
